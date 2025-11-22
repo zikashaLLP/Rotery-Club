@@ -39,7 +39,7 @@ const Run4OurSoldiers = () => {
               those who protect, serve, and inspire us every day.
             </p>
             <Link href="/race-categories">
-              <Button size="lg" variant="default">
+              <Button size="lg" variant="primary">
                 Read More
               </Button>
             </Link>

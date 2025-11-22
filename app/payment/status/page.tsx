@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const PaymentStatusLanding = () => {
+const PaymentStatusContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const merchantOrderIdParam = searchParams?.get('merchantOrderId') ?? ''
@@ -23,6 +23,14 @@ const PaymentStatusLanding = () => {
   }, [merchantOrderId, router])
 
   return null
+}
+
+const PaymentStatusLanding = () => {
+  return (
+    <Suspense fallback={null}>
+      <PaymentStatusContent />
+    </Suspense>
+  )
 }
 
 export default PaymentStatusLanding

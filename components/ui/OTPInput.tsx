@@ -59,7 +59,9 @@ const OTPInput: React.FC<OTPInputProps> = ({ length = 6, onComplete, className }
           inputMode="numeric"
           maxLength={1}
           value={digit}
-          ref={(el) => (inputRefs.current[index] = el)}
+          ref={(el) => {
+            inputRefs.current[index] = el
+          }}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target, index)}
           onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, index)}
           className="w-12 h-12 text-center text-lg font-semibold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"

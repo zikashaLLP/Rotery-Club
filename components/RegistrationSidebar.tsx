@@ -185,7 +185,7 @@ const RegistrationSidebar: React.FC<RegistrationSidebarProps> = ({ isOpen, onClo
 
                 {error && <p className="text-sm text-red-500">{error}</p>}
 
-                <Button type="submit" variant="default" className="w-full" size="lg">
+                <Button type="submit" variant="primary" className="w-full" size="lg">
                   Request OTP
                 </Button>
               </form>
@@ -239,7 +239,7 @@ const RegistrationSidebar: React.FC<RegistrationSidebarProps> = ({ isOpen, onClo
 
                 <Button
                   type="submit"
-                  variant="default"
+                  variant="primary"
                   className="w-full"
                   size="lg"
                   disabled={otp.length !== 6}
