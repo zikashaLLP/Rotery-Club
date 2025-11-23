@@ -457,3 +457,85 @@ p {
     0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Rich HTML Content Styles from API */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.prose table thead {
+  background-color: #640D5F;
+  color: white;
+}
+
+.prose table th {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+.prose table td {
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: white;
+  color: #2B1341;
+}
+
+.prose table tbody tr:hover {
+  background-color: #FFF1F5;
+}
+
+.prose table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.prose table tbody tr:nth-child(even):hover {
+  background-color: #FFF1F5;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose ul li,
+.prose ol li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.prose ul li {
+  list-style-type: disc;
+}
+
+.prose ol li {
+  list-style-type: decimal;
+}
+
+.prose figure {
+  margin: 1.5rem 0;
+}
+
+.prose figure table {
+  width: 100%;
+}
+
+.prose h5 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: #640D5F;
+}
+

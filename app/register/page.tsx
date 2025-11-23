@@ -4,12 +4,9 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Activity, Users, Heart } from 'lucide-react'
-import EventHeader from '@/components/EventHeader'
 import TicketCard from '@/components/TicketCard'
-import DiscountCodeSection from '@/components/DiscountCodeSection'
 import TicketSummaryCard from '@/components/TicketSummaryCard'
 import { useCart } from '@/context/CartContext'
-import { useDiscountCode } from '@/hooks/useDiscountCode'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -21,12 +18,6 @@ export default function RegisterPage() {
     removeTicket,
   } = useCart()
 
-  const {
-    discountCode,
-    setDiscountCode,
-    applyDiscountCode,
-  } = useDiscountCode()
-
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
       alert('Please select at least one ticket')
@@ -36,12 +27,8 @@ export default function RegisterPage() {
     router.push('/checkout')
   }
 
-  const handleApplyDiscount = () => {
-    applyDiscountCode(discountCode)
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] relative overflow-hidden pt-20 md:pt-24">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -81,14 +68,6 @@ export default function RegisterPage() {
           className="absolute bottom-32 right-32 w-24 h-24 bg-gradient-to-br from-[#640D5F]/15 to-[#D91656]/15 rounded-full blur-2xl"
         />
       </div>
-
-      <EventHeader
-        eventName="Visnagar Marathon 2025"
-        eventDate="28 Dec 2025"
-        eventTime="5:00 AM IST Onwards"
-        eventVenue="Rotary Club of Visnagar"
-        onBack={() => router.push('/')}
-      />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-0 md:px-4 py-3 md:py-8 relative z-10">
@@ -178,13 +157,7 @@ export default function RegisterPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="hidden md:block md:w-[35%] lg:w-[30%]"
           >
-            <DiscountCodeSection
-              discountCode={discountCode}
-              onDiscountCodeChange={setDiscountCode}
-              onApplyDiscount={handleApplyDiscount}
-            />
-
-            <div className="bg-white rounded-3xl shadow-xl border-2 border-[#F8C8DC] overflow-hidden sticky top-24 mt-6 hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white rounded-3xl shadow-xl border-2 border-[#F8C8DC] overflow-hidden sticky top-24 hover:shadow-2xl transition-all duration-300">
               <TicketSummaryCard
                 selectedTickets={selectedTickets}
                 totalAmount={totalAmount}

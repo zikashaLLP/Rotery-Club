@@ -93,7 +93,7 @@ const PaymentStatusResultClient: React.FC<PaymentStatusResultClientProps> = ({
         {result.payments.map((payment) => (
           <div
             key={payment.Id}
-            className="border border-secondary-2 rounded-md p-4 flex flex-col gap-1"
+            className="border border-secondary-2 rounded-md p-4 flex flex-col gap-2"
           >
             <div className="flex justify-between text-sm">
               <span className="font-medium text-text-primary">
@@ -107,14 +107,13 @@ const PaymentStatusResultClient: React.FC<PaymentStatusResultClientProps> = ({
                 {payment.Participant?.Marathon?.Name || 'N/A'}
               </span>
             </p>
-            <p className="text-xs text-text-secondary">
-              Status:{' '}
-              <span className="text-text-primary font-medium">
-                {payment.Payment_Status}
-              </span>
-            </p>
           </div>
         ))}
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-800">
+            <span className="font-semibold">Note:</span> Your tickets have been sent via WhatsApp and Email. Kindly check it.
+          </p>
+        </div>
       </div>
     )
   }
@@ -158,22 +157,22 @@ const PaymentStatusResultClient: React.FC<PaymentStatusResultClientProps> = ({
             </div>
 
             <div className="mt-6 space-y-3 text-sm text-text-secondary">
-              <p>
+              <div className="py-0.5">
                 <span className="font-semibold text-text-primary">Merchant Order ID:</span>{' '}
                 {result?.merchantOrderId || merchantOrderId}
-              </p>
-              <p>
+              </div>
+              <div className="py-0.5">
                 <span className="font-semibold text-text-primary">Transaction ID:</span>{' '}
                 {result?.transactionId || 'Pending'}
-              </p>
-              <p>
+              </div>
+              <div className="py-0.5">
                 <span className="font-semibold text-text-primary">Participants:</span>{' '}
                 {result?.participantCount ?? result?.payments?.length ?? 0}
-              </p>
-              <p>
+              </div>
+              <div className="py-0.5">
                 <span className="font-semibold text-text-primary">State:</span>{' '}
                 {result?.state || 'Pending'}
-              </p>
+              </div>
             </div>
 
             {renderPayments()}

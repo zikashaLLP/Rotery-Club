@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronDown, ChevronUp } from 'lucide-react'
-import EventHeader from '@/components/EventHeader'
+import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react'
 import ParticipantForm from '@/components/ParticipantForm'
 import Button from '@/components/ui/Button'
 import { useCart } from '@/context/CartContext'
@@ -138,18 +137,23 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
-      <EventHeader
-        eventName="KD Amdavad Marathon"
-        eventDate="15 Feb 2026"
-        eventTime="4:30 AM IST Onwards"
-        eventVenue="River Front Event Centre"
-        onBack={() => router.push('/register')}
-      />
+      {/* Back Button */}
+      <div className="sticky top-0 z-40 pt-20 md:pt-24">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <button 
+            onClick={() => router.push('/register')}
+            className="flex items-center gap-2 text-[#640D5F] hover:text-[#D91656] transition-colors font-bold text-lg md:text-xl"
+          >
+            <ArrowLeft className="w-6 h-6 md:w-7 md:h-7" />
+            <span>Back</span>
+          </button>
+        </div>
+      </div>
 
-      <div className="mx-auto py-6 md:py-8 px-0 md:px-4">
-        <div className="md:flex md:gap-6 lg:gap-8">
+      <div className="max-w-7xl mx-auto py-6 md:py-8 px-4">
+        <div className="md:flex md:gap-6 lg:gap-8 justify-center">
           {/* Left Section - Form */}
-          <div className="section-left mb-6 md:mb-0 w-full md:w-auto">
+          <div className="section-left mb-6 md:mb-0 w-full md:min-w-[600px] md:max-w-[800px]">
             {/* Grouped by Ticket Type */}
             {Array.from(new Set(participants.map(p => p.ticketName))).map((ticketName) => {
               const ticketParticipants = participants.filter(p => p.ticketName === ticketName)
@@ -157,7 +161,7 @@ export default function CheckoutPage() {
               return (
                 <div key={ticketName} className="mb-8">
                   {/* Ticket Type Header */}
-                  <div className="text-lg font-bold leading-none mb-4 text-text-primary px-4 md:px-0">
+                  <div className="text-lg font-bold leading-none mb-4 text-text-primary">
                     {ticketName}
                   </div>
 

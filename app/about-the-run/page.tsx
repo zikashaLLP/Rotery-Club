@@ -347,16 +347,6 @@ export default function AboutTheRunPage() {
           </motion.div>
         </div>
       </section>
-
-      {/* 9. FOOTER */}
-      <footer className="bg-[#640D5F] text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-lg mb-4">Rotary Club of Visnagar</p>
-          <p className="text-sm text-white/80">
-            © 2025 Visnagar Marathon. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }

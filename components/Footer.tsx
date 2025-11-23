@@ -8,7 +8,7 @@ const Footer = () => {
   const footerLinks = [
     { label: 'Home', href: '/' },
     { label: 'Categories', href: '/register#categories' },
-    { label: 'About', href: '/#hero' },
+    { label: 'About', href: '/about-the-run' },
     { label: 'Results', href: '/results' },
     { label: 'Contact', href: '/#contact' },
   ]
@@ -44,6 +44,16 @@ const Footer = () => {
           {/* About */}
           <div>
             <h3 className="text-lg font-bold mb-4">About</h3>
+            <ul className="space-y-2 mb-4">
+              <li>
+                <Link
+                  href="/about-the-run"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  About the Run
+                </Link>
+              </li>
+            </ul>
             <p className="text-white/80 text-sm leading-relaxed">
               Visnagar Marathon 2025 - Run for Cervical Cancer Awareness. Organized by Rotary Club
               of Visnagar to promote fitness, health education, and social responsibility.

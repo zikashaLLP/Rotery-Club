@@ -12,11 +12,9 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname()
   
   // Pages that should not have header and footer
-  const isRegisterPage = pathname === '/register'
-  const isCheckoutPage = pathname === '/checkout'
-  const isPaymentPage = pathname.startsWith('/payment')
+  const isPaymentStatusPage = pathname === '/payment/status'
   
-  const hideHeaderFooter = isRegisterPage || isCheckoutPage || isPaymentPage
+  const hideHeaderFooter = isPaymentStatusPage
 
   return (
     <>

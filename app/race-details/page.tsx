@@ -1,31 +1,70 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, Clock, MapPin, DollarSign, Download, Maximize2, Activity } from 'lucide-react'
+import { Calendar, Clock, MapPin, DollarSign, Download, Maximize2, Activity, ChevronDown, ChevronUp } from 'lucide-react'
+import { API_BASE_URL } from '@/lib/config'
 
-const raceData = {
-  Name: "Miracle Miles",
-  Description: "This ticket entitles you for participation in Miracle Miles - 20 Miler Run (32 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate",
-  Track_Length: "32 KM",
-  Date: "2025-11-20",
-  Reporting_Time: "06:00:00",
-  Run_Start_Time: "07:00:00",
-  Location: "Ahmedabad",
-  Terms_Conditions: "<ul><li>Participants must be 18 years or older</li><li>Medical clearance required</li><li>No refunds after registration</li><li>BIB collection mandatory on event day</li></ul>",
-  How_To_Apply: "<ul><li>Fill out the registration form online</li><li>Make payment through secure gateway</li><li>Receive confirmation email with details</li><li>Collect BIB and kit on event day</li></ul>",
-  Eligibility_Criteria: "<ul><li>Minimum age: 18 years</li><li>Medical fitness certificate required</li><li>Previous running experience recommended</li><li>Valid ID proof mandatory</li><li>Health insurance recommended</li></ul>",
-  Rules_Regulations: "<ul><li>Follow race route markers strictly</li><li>Wear provided BIB at all times during race</li><li>No external assistance allowed</li><li>Respect other participants and volunteers</li><li>Follow traffic rules and marshal instructions</li><li>Complete race within time limit</li></ul>",
-  Runner_Amenities: "<p>All participants receive comprehensive race amenities:</p><ol><li>Event T-Shirt (premium quality)</li><li>Finisher Medal (for completing the race)</li><li>Timing BIB with chip</li><li>On-Route Hydration Support (water stations)</li><li>Post-run Refreshment (energy drinks, snacks)</li><li>E-Certificate (downloadable after race)</li><li>Medical Support (on-route and finish line)</li></ol>",
-  Route_Map: "/Map.png",
-  Price_List: "<table class='w-full border-collapse'><thead><tr class='bg-[#640D5F] text-white'><th class='border border-[#F8C8DC] p-3 text-left'>Category</th><th class='border border-[#F8C8DC] p-3 text-left'>Price</th></tr></thead><tbody><tr class='hover:bg-[#FFF1F5]'><td class='border border-[#F8C8DC] p-3 text-[#2B1341]'>Early Bird</td><td class='border border-[#F8C8DC] p-3 text-[#2B1341] font-semibold'>₹250</td></tr><tr class='hover:bg-[#FFF1F5]'><td class='border border-[#F8C8DC] p-3 text-[#2B1341]'>Regular</td><td class='border border-[#F8C8DC] p-3 text-[#2B1341] font-semibold'>₹300</td></tr><tr class='hover:bg-[#FFF1F5]'><td class='border border-[#F8C8DC] p-3 text-[#2B1341]'>Late Registration</td><td class='border border-[#F8C8DC] p-3 text-[#2B1341] font-semibold'>₹350</td></tr></tbody></table>",
-  Fees_Amount: "300.00"
+interface Marathon {
+  Id: number
+  Name: string
+  Description: string
+  Track_Length: string
+  Date: string
+  Reporting_Time: string
+  Run_Start_Time: string
+  Location: string
+  Terms_Conditions: string
+  How_To_Apply: string
+  Eligibility_Criteria: string
+  Rules_Regulations: string
+  Runner_Amenities: string
+  Route_Map: string
+  Price_List: string
+  Fees_Amount: string
 }
 
 export default function RaceDetailsPage() {
+  const [marathons, setMarathons] = useState<Marathon[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState(0)
+  const [activeSection, setActiveSection] = useState<{ [key: number]: string }>({})
   const [isMapModalOpen, setIsMapModalOpen] = useState(false)
+  const [selectedMap, setSelectedMap] = useState<string>('')
+
+  useEffect(() => {
+    const fetchMarathons = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch(`${API_BASE_URL}/api/marathon`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch marathon data')
+        }
+
+        const data = await response.json()
+        if (data.success && data.data && Array.isArray(data.data)) {
+          setMarathons(data.data)
+          // Set first section as active for first marathon
+          if (data.data.length > 0) {
+            setActiveSection({ 0: 'Info' })
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching marathon data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchMarathons()
+  }, [])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -33,6 +72,7 @@ export default function RaceDetailsPage() {
   }
 
   const formatTime = (timeString: string) => {
+    if (!timeString) return ''
     const [hours, minutes] = timeString.split(':')
     const hour = parseInt(hours)
     const ampm = hour >= 12 ? 'PM' : 'AM'
@@ -40,281 +80,293 @@ export default function RaceDetailsPage() {
     return `${displayHour}:${minutes} ${ampm}`
   }
 
+  const toggleSection = (marathonIndex: number, section: string) => {
+    setActiveSection(prev => ({
+      ...prev,
+      [marathonIndex]: prev[marathonIndex] === section ? '' : section,
+    }))
+  }
+
+  const isSectionActive = (marathonIndex: number, section: string) => {
+    return activeSection[marathonIndex] === section
+  }
+
+  const openMapModal = (routeMap: string) => {
+    setSelectedMap(routeMap)
+    setIsMapModalOpen(true)
+  }
+
+  const getRouteMapUrl = (routeMap: string) => {
+    if (!routeMap) return '/Map.png'
+    if (routeMap.startsWith('http')) return routeMap
+    // If it starts with /public, it's from the API, prepend API_BASE_URL
+    if (routeMap.startsWith('/public')) return `${API_BASE_URL}${routeMap}`
+    // If it starts with /, it's a local path
+    if (routeMap.startsWith('/')) return routeMap
+    // Otherwise, prepend API_BASE_URL
+    return `${API_BASE_URL}/${routeMap}`
+  }
+
+  const sections = [
+    { id: 'Info', label: 'Info' },
+    { id: 'How_To_Apply', label: 'How to Apply' },
+    { id: 'Eligibility_Criteria', label: 'Eligibility Criteria' },
+    { id: 'Rules_Regulations', label: 'Rules and Regulations' },
+    { id: 'Runner_Amenities', label: 'Runner amenities' },
+    { id: 'Route_Map', label: 'Route Map' },
+    { id: 'Price_List', label: 'Prize List' },
+  ]
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D91656] mx-auto"></div>
+          <p className="mt-4 text-[#640D5F]">Loading race details...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (marathons.length === 0) {
+    return (
+      <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-[#640D5F]">No marathon data available</p>
+        </div>
+      </div>
+    )
+  }
+
+  const currentMarathon = marathons[activeTab]
+
   return (
     <div className="min-h-screen bg-white pt-20 md:pt-0">
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#640D5F] mb-2">
-                {raceData.Name} – {raceData.Track_Length}
-              </h1>
-              <p className="text-xl md:text-2xl font-bold text-[#D91656]">
-                Premium Race Category • Limited Seats
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-4 border-2 border-[#F8C8DC]">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-5 h-5 text-[#EB5B00]" />
-                  <span className="text-sm font-semibold text-[#640D5F]">Date</span>
-                </div>
-                <p className="text-lg font-bold text-[#2B1341]">{formatDate(raceData.Date)}</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-4 border-2 border-[#F8C8DC]">
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-5 h-5 text-[#EB5B00]" />
-                  <span className="text-sm font-semibold text-[#640D5F]">Reporting</span>
-                </div>
-                <p className="text-lg font-bold text-[#2B1341]">{formatTime(raceData.Reporting_Time)}</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-4 border-2 border-[#F8C8DC]">
-                <div className="flex items-center gap-2 mb-2">
-                  <Activity className="w-5 h-5 text-[#EB5B00]" />
-                  <span className="text-sm font-semibold text-[#640D5F]">Start Time</span>
-                </div>
-                <p className="text-lg font-bold text-[#2B1341]">{formatTime(raceData.Run_Start_Time)}</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-4 border-2 border-[#FDD48F]">
-                <div className="flex items-center gap-2 mb-2">
-                  <DollarSign className="w-5 h-5 text-[#EB5B00]" />
-                  <span className="text-sm font-semibold text-[#640D5F]">Entry Fee</span>
-                </div>
-                <p className="text-lg font-bold text-[#2B1341]">₹{raceData.Fees_Amount}</p>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link
-                href="/register"
-                className="inline-block px-8 py-4 bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white font-bold rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-200"
-              >
-                Register Now
-              </Link>
-            </div>
-          </motion.div>
-        </div>
+      {/* Banner Section */}
+      <section className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+        <Image
+          src="/run.jpg"
+          alt="Race Banner"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
       </section>
 
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-4">Race Description</h2>
-            <p className="text-lg text-[#2B1341]/80 leading-relaxed">
-              {raceData.Description}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Race Info Section with Tabs */}
+      <section className="py-12 md:py-20 bg-white" id="RaceKmInfo" style={{ paddingTop: '80px' }}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            {/* Marathon Tabs */}
+            <div className="mb-8">
+              <div className="flex flex-wrap gap-2 border-b-2 border-[#F8C8DC]">
+                {marathons.map((marathon, index) => (
+                  <button
+                    key={marathon.Id}
+                    onClick={() => {
+                      setActiveTab(index)
+                      setActiveSection({ [index]: 'Info' })
+                    }}
+                    className={`px-6 py-3 font-semibold transition-colors ${
+                      activeTab === index
+                        ? 'bg-[#D91656] text-white border-b-4 border-[#D91656]'
+                        : 'text-[#640D5F] hover:bg-[#FFF1F5]'
+                    }`}
+                  >
+                    {marathon.Name}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-      <section className="py-12 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Activity, label: 'Distance', value: raceData.Track_Length },
-              { icon: Calendar, label: 'Date', value: formatDate(raceData.Date) },
-              { icon: Clock, label: 'Reporting Time', value: formatTime(raceData.Reporting_Time) },
-              { icon: Clock, label: 'Start Time', value: formatTime(raceData.Run_Start_Time) },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 border-2 border-[#F8C8DC] shadow-lg text-center"
-              >
-                <div className="w-12 h-12 bg-[#EB5B00]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-6 h-6 text-[#EB5B00]" />
+            {/* Tab Content */}
+            {currentMarathon && (
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                {/* Sidebar Navigation */}
+                <div className="md:col-span-4">
+                  <div className="bg-white rounded-2xl p-6 border-2 border-[#F8C8DC] shadow-lg sticky top-24">
+                    <ul className="space-y-2">
+                      {sections.map((section) => (
+                        <li key={section.id}>
+                          <button
+                            onClick={() => toggleSection(activeTab, section.id)}
+                            className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between ${
+                              isSectionActive(activeTab, section.id)
+                                ? 'bg-[#D91656] text-white'
+                                : 'text-[#640D5F] hover:bg-[#FFF1F5]'
+                            }`}
+                          >
+                            <span>{section.label}</span>
+                            {isSectionActive(activeTab, section.id) ? (
+                              <ChevronUp className="w-4 h-4" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4" />
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <p className="text-sm font-semibold text-[#640D5F] mb-2">{item.label}</p>
-                <p className="text-lg font-bold text-[#2B1341]">{item.value}</p>
-              </motion.div>
-            ))}
+
+                {/* Content Area */}
+                <div className="md:col-span-8">
+                  <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC] shadow-lg">
+                    {/* Info Section */}
+                    {isSectionActive(activeTab, 'Info') && (
+                      <div className="space-y-6">
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-4">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div className="border-2 border-[#F8C8DC] rounded-lg p-6">
+                          <h4 className="text-xl font-bold text-[#640D5F] mb-4">
+                            Participation Through Physical Run
+                          </h4>
+                          <ul className="space-y-3">
+                            <li className="flex items-start gap-3">
+                              <Calendar className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Date:</strong> {formatDate(currentMarathon.Date)}
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <Clock className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Run Start Time:</strong> {formatTime(currentMarathon.Run_Start_Time)}
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <MapPin className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Location:</strong> {currentMarathon.Location}
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <Clock className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Reporting Time:</strong> {formatTime(currentMarathon.Reporting_Time)}
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="mt-6">
+                          <p className="text-lg text-[#2B1341] mb-4">{currentMarathon.Description}</p>
+                        </div>
+                        {currentMarathon.Terms_Conditions && (
+                          <div className="mt-6">
+                            <h5 className="text-xl font-bold text-[#640D5F] mb-3">Terms & Conditions</h5>
+                            <div
+                              className="text-[#2B1341]/80 prose prose-ul:list-disc prose-li:ml-6 max-w-none"
+                              dangerouslySetInnerHTML={{ __html: currentMarathon.Terms_Conditions }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* How to Apply Section */}
+                    {isSectionActive(activeTab, 'How_To_Apply') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div
+                          className="text-[#2B1341]/80 prose prose-ul:list-disc prose-li:ml-6 max-w-none"
+                          dangerouslySetInnerHTML={{ __html: currentMarathon.How_To_Apply }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Eligibility Criteria Section */}
+                    {isSectionActive(activeTab, 'Eligibility_Criteria') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div
+                          className="text-[#2B1341]/80 prose prose-ul:list-disc prose-li:ml-6 max-w-none"
+                          dangerouslySetInnerHTML={{ __html: currentMarathon.Eligibility_Criteria }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Rules and Regulations Section */}
+                    {isSectionActive(activeTab, 'Rules_Regulations') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div
+                          className="text-[#2B1341]/80 prose prose-ul:list-disc prose-li:ml-6 max-w-none"
+                          dangerouslySetInnerHTML={{ __html: currentMarathon.Rules_Regulations }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Runner Amenities Section */}
+                    {isSectionActive(activeTab, 'Runner_Amenities') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div
+                          className="text-[#2B1341]/80 prose prose-ol:list-decimal prose-li:ml-6 max-w-none"
+                          dangerouslySetInnerHTML={{ __html: currentMarathon.Runner_Amenities }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Route Map Section */}
+                    {isSectionActive(activeTab, 'Route_Map') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#F8C8DC] mb-6">
+                          <Image
+                            src={getRouteMapUrl(currentMarathon.Route_Map)}
+                            alt={`${currentMarathon.Name} Route Map`}
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 768px) 100vw, 80vw"
+                          />
+                        </div>
+                        <div className="flex flex-wrap gap-4">
+                          <button
+                            onClick={() => openMapModal(currentMarathon.Route_Map)}
+                            className="px-6 py-3 bg-[#640D5F] text-white font-semibold rounded-xl hover:bg-[#D91656] transition-colors flex items-center gap-2"
+                          >
+                            <Maximize2 className="w-5 h-5" />
+                            View Full
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Prize List Section */}
+                    {isSectionActive(activeTab, 'Price_List') && (
+                      <div>
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-6">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div className="overflow-x-auto">
+                          <div
+                            className="text-[#2B1341]/80 prose max-w-none"
+                            dangerouslySetInnerHTML={{ __html: currentMarathon.Price_List }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#EB5B00]/10 rounded-full flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-[#EB5B00]" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-[#640D5F] mb-1">Location</p>
-                  <p className="text-xl font-bold text-[#2B1341]">{raceData.Location}</p>
-                </div>
-              </div>
-              <button className="px-6 py-3 bg-[#640D5F] text-white font-semibold rounded-xl hover:bg-[#D91656] transition-colors">
-                View on Map
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">Eligibility Criteria</h2>
-            <div 
-              className="text-[#2B1341]/80 leading-relaxed prose prose-ul:list-disc prose-li:ml-6"
-              dangerouslySetInnerHTML={{ __html: raceData.Eligibility_Criteria }}
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">How to Apply</h2>
-            <div 
-              className="text-[#2B1341]/80 leading-relaxed prose prose-ul:list-disc prose-li:ml-6"
-              dangerouslySetInnerHTML={{ __html: raceData.How_To_Apply }}
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">Rules & Regulations</h2>
-            <div 
-              className="text-[#2B1341]/80 leading-relaxed prose prose-ul:list-disc prose-li:ml-6"
-              dangerouslySetInnerHTML={{ __html: raceData.Rules_Regulations }}
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">Runner Amenities</h2>
-            <div 
-              className="text-[#2B1341]/80 leading-relaxed prose prose-ol:list-decimal prose-li:ml-6"
-              dangerouslySetInnerHTML={{ __html: raceData.Runner_Amenities }}
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">Route Map</h2>
-            <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden border-2 border-[#F8C8DC] mb-6">
-              <Image
-                src={raceData.Route_Map}
-                alt="Race Route Map"
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 80vw"
-              />
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <button className="px-6 py-3 bg-[#640D5F] text-white font-semibold rounded-xl hover:bg-[#D91656] transition-colors flex items-center gap-2">
-                <Download className="w-5 h-5" />
-                Download
-              </button>
-              <button 
-                onClick={() => setIsMapModalOpen(true)}
-                className="px-6 py-3 bg-[#00A99D] text-white font-semibold rounded-xl hover:bg-[#00A99D]/80 transition-colors flex items-center gap-2"
-              >
-                <Maximize2 className="w-5 h-5" />
-                View Full
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl p-8 border-2 border-[#F8C8DC] shadow-lg overflow-x-auto"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-6">Price List</h2>
-            <div 
-              className="text-[#2B1341]/80"
-              dangerouslySetInnerHTML={{ __html: raceData.Price_List }}
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-[#D91656] to-[#640D5F] rounded-3xl p-12 text-center shadow-2xl"
-          >
-            <p className="text-white/90 text-lg mb-4">Entry Fee</p>
-            <p className="text-5xl md:text-6xl font-black text-white">₹{raceData.Fees_Amount}</p>
-          </motion.div>
-        </div>
-      </section>
-
+      {/* CTA Section */}
       <section className="py-12 md:py-20 bg-gradient-to-r from-[#640D5F] to-[#D91656]">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div
@@ -340,8 +392,9 @@ export default function RaceDetailsPage() {
         </div>
       </section>
 
-      {isMapModalOpen && (
-        <div 
+      {/* Map Modal */}
+      {isMapModalOpen && selectedMap && (
+        <div
           className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4"
           onClick={() => setIsMapModalOpen(false)}
         >
@@ -360,7 +413,7 @@ export default function RaceDetailsPage() {
             </button>
             <div className="relative w-full h-[80vh]">
               <Image
-                src={raceData.Route_Map}
+                src={getRouteMapUrl(selectedMap)}
                 alt="Full Race Route Map"
                 fill
                 className="object-contain"
