@@ -18,7 +18,7 @@ const nextConfig = {
     ],
   },
   env: {
-    NEXT_PUBLIC_API_BASE_URL: 'https://193.203.161.3:5152',
+    NEXT_PUBLIC_API_BASE_URL: 'https://rotaryvisnagarapi.zikasha.com',
   },
 }
 
