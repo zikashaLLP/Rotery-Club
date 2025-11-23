@@ -10,11 +10,21 @@ import MarathonForm from '@/components/admin/MarathonForm'
 interface Marathon {
   Id: number
   Name: string
+  Description: string
   Track_Length: string
   Date: string
+  Reporting_Time: string
+  Run_Start_Time: string
   Location: string
+  Terms_Conditions: string
+  How_To_Apply: string
+  Eligibility_Criteria: string
+  Rules_Regulations: string
+  Runner_Amenities: string
+  Route_Map: string
+  Price_List: string
   Fees_Amount: string
-  Created_At: string
+  Created_At?: string
 }
 
 export default function MarathonsPage() {

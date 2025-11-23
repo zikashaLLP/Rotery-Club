@@ -74,7 +74,7 @@ export default function RichTextEditor({
     if (editor && value !== undefined && isReady) {
       const currentHtml = editor.getHTML()
       if (currentHtml !== value) {
-        editor.commands.setContent(value || '', false)
+        editor.commands.setContent(value || '', { emitUpdate: false })
       }
     }
   }, [value, editor, isReady])
