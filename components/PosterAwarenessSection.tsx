@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
@@ -9,16 +9,29 @@ const PosterAwarenessSection = () => {
     '🎗 Cervical Cancer Awareness Campaign',
     '🏥 Encouraging Early Screening for Women',
     '🧡 Community Health & Social Responsibility',
-    '🏃‍♀️ Promoting Fitness Across All Age Groups',
+    '🏃 Promoting Fitness Across All Age Groups',
   ]
 
-  const floatingDots = Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 2,
-    duration: 3 + Math.random() * 2,
-  }))
+  const [floatingDots, setFloatingDots] = useState<Array<{
+    id: number
+    x: number
+    y: number
+    delay: number
+    duration: number
+  }>>([])
+
+  useEffect(() => {
+    // Generate random positions only on client side to avoid hydration mismatch
+    setFloatingDots(
+      Array.from({ length: 6 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        delay: Math.random() * 2,
+        duration: 3 + Math.random() * 2,
+      }))
+    )
+  }, [])
 
   return (
     <section className="py-16 md:py-20 relative overflow-hidden">
@@ -172,16 +185,17 @@ const PosterAwarenessSection = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 1.4 }}
                 >
-                  <motion.button
+                  <motion.a
+                    href="/about-the-run"
                     whileHover={{ 
                       scale: 1.05,
                       boxShadow: '0 20px 40px -12px rgba(255, 178, 0, 0.4)'
                     }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white font-semibold px-8 py-4 rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl"
+                    className="inline-block bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white font-semibold px-8 py-4 rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl"
                   >
                     Learn More About Our Mission
-                  </motion.button>
+                  </motion.a>
                 </motion.div>
               </div>
             </motion.div>

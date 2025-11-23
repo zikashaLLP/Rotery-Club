@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import React from 'react'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
 import LayoutWrapper from '@/components/LayoutWrapper'

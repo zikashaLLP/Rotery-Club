@@ -103,25 +103,30 @@ export default function ResultPage() {
   }
 
   const getImageUrl = (result: ResultData) => {
-    // Prioritize Image_Url if available
-    if (result.Image_Url) {
-      return result.Image_Url
+    // Use Image_Url if available, otherwise fallback to Image field
+    const imagePath = result.Image_Url || result.Image
+    
+    if (!imagePath) return '/placeholder-winner.jpg'
+    
+    const trimmedPath = imagePath.trim()
+    
+    // If it's already a full URL, return as is
+    if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
+      return trimmedPath
     }
-    // Handle Image field
-    if (result.Image) {
-      // If it's already a full URL, return as is
-      if (result.Image.startsWith('http')) {
-        return result.Image
-      }
-      // If it starts with /public, remove /public prefix and use API_BASE_URL
-      if (result.Image.startsWith('/public')) {
-        return `${API_BASE_URL}${result.Image}`
-      }
-      // Otherwise, prepend API_BASE_URL
-      return `${API_BASE_URL}${result.Image.startsWith('/') ? '' : '/'}${result.Image}`
+    
+    // If it starts with /public, it's from the API, prepend API_BASE_URL
+    if (trimmedPath.startsWith('/public')) {
+      return `${API_BASE_URL}${trimmedPath}`
     }
-    // Fallback to a placeholder or default image
-    return '/placeholder-winner.jpg'
+    
+    // If it starts with /, it's a local path
+    if (trimmedPath.startsWith('/')) {
+      return trimmedPath
+    }
+    
+    // Otherwise, prepend API_BASE_URL
+    return `${API_BASE_URL}/${trimmedPath}`
   }
 
   return (
@@ -222,7 +227,6 @@ export default function ResultPage() {
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                unoptimized={result.Image?.startsWith('http') || result.Image_Url?.startsWith('http')}
                               />
                               {/* Position Badge */}
                               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
@@ -283,7 +287,6 @@ export default function ResultPage() {
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                unoptimized={result.Image?.startsWith('http') || result.Image_Url?.startsWith('http')}
                               />
                               {/* Position Badge */}
                               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
