@@ -11,8 +11,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '193.203.161.3',
-        port: '5152',
+        hostname: 'rotaryvisnagarapi.zikasha.com',
         pathname: '/**',
       },
     ],

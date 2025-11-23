@@ -13,8 +13,9 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   
   // Pages that should not have header and footer
   const isPaymentStatusPage = pathname === '/payment/status'
+  const isAdminPage = pathname?.startsWith('/admin')
   
-  const hideHeaderFooter = isPaymentStatusPage
+  const hideHeaderFooter = isPaymentStatusPage || isAdminPage
 
   return (
     <>
