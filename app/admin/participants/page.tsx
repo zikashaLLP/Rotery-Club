@@ -97,12 +97,12 @@ export default function ParticipantsPage() {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-[#F8C8DC] mb-6">
+          <div className="bg-white rounded-2xl p-4 md:p-6 border-2 border-[#F8C8DC] mb-6">
             <div className="flex items-center gap-2 mb-4">
               <Filter className="w-5 h-5 text-[#640D5F]" />
-              <h3 className="font-semibold text-[#640D5F]">Filters</h3>
+              <h3 className="font-semibold text-[#640D5F] text-base md:text-lg">Filters</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
               <div>
                 <label className="block text-sm font-medium text-[#2B1341] mb-1">Marathon Type</label>
                 <select
@@ -179,57 +179,108 @@ export default function ParticipantsPage() {
 
           {/* Participants Table */}
           {isLoading ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC]">
-              <div className="text-center text-[#2B1341]/70">Loading participants...</div>
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC]">
+              <div className="text-center text-sm md:text-base text-[#2B1341]/70">Loading participants...</div>
             </div>
           ) : participants.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC] text-center">
-              <Users className="w-16 h-16 text-[#F8C8DC] mx-auto mb-4" />
-              <p className="text-[#2B1341]/70">No participants found</p>
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC] text-center">
+              <Users className="w-12 h-12 md:w-16 md:h-16 text-[#F8C8DC] mx-auto mb-4" />
+              <p className="text-sm md:text-base text-[#2B1341]/70">No participants found</p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
-                    <tr>
-                      <th className="px-6 py-4 text-left font-semibold">BIB Number</th>
-                      <th className="px-6 py-4 text-left font-semibold">Name</th>
-                      <th className="px-6 py-4 text-left font-semibold">Email</th>
-                      <th className="px-6 py-4 text-left font-semibold">Contact</th>
-                      <th className="px-6 py-4 text-left font-semibold">Marathon</th>
-                      <th className="px-6 py-4 text-left font-semibold">Type</th>
-                      <th className="px-6 py-4 text-left font-semibold">T-Shirt</th>
-                      <th className="px-6 py-4 text-center font-semibold">Payment</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {participants.map((participant) => (
-                      <tr key={participant.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
-                        <td className="px-6 py-4 font-medium text-[#640D5F]">{participant.BIB_Number}</td>
-                        <td className="px-6 py-4 text-[#2B1341]">{participant.ParticipantDetails.Full_Name}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{participant.ParticipantDetails.Email}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{participant.ParticipantDetails.Contact_Number}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{participant.Marathon.Name}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{participant.Marathon_Type}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{participant.ParticipantDetails.Tshirt_Size}</td>
-                        <td className="px-6 py-4 text-center">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              participant.Is_Payment_Completed
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-red-100 text-red-700'
-                            }`}
-                          >
-                            {participant.Is_Payment_Completed ? 'Paid' : 'Unpaid'}
-                          </span>
-                        </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-semibold">BIB Number</th>
+                        <th className="px-6 py-4 text-left font-semibold">Name</th>
+                        <th className="px-6 py-4 text-left font-semibold">Email</th>
+                        <th className="px-6 py-4 text-left font-semibold">Contact</th>
+                        <th className="px-6 py-4 text-left font-semibold">Marathon</th>
+                        <th className="px-6 py-4 text-left font-semibold">Type</th>
+                        <th className="px-6 py-4 text-left font-semibold">T-Shirt</th>
+                        <th className="px-6 py-4 text-center font-semibold">Payment</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {participants.map((participant) => (
+                        <tr key={participant.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
+                          <td className="px-6 py-4 font-medium text-[#640D5F]">{participant.BIB_Number}</td>
+                          <td className="px-6 py-4 text-[#2B1341]">{participant.ParticipantDetails.Full_Name}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70 text-sm">{participant.ParticipantDetails.Email}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{participant.ParticipantDetails.Contact_Number}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{participant.Marathon.Name}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{participant.Marathon_Type}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{participant.ParticipantDetails.Tshirt_Size}</td>
+                          <td className="px-6 py-4 text-center">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                participant.Is_Payment_Completed
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-red-100 text-red-700'
+                              }`}
+                            >
+                              {participant.Is_Payment_Completed ? 'Paid' : 'Unpaid'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+
+              {/* Mobile/Tablet Card View */}
+              <div className="lg:hidden space-y-4">
+                {participants.map((participant) => (
+                  <div
+                    key={participant.Id}
+                    className="bg-white rounded-2xl border-2 border-[#F8C8DC] p-4 space-y-3"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-base text-[#2B1341]">{participant.ParticipantDetails.Full_Name}</h3>
+                        <p className="text-sm text-[#640D5F] font-medium mt-1">BIB: {participant.BIB_Number}</p>
+                      </div>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ml-2 ${
+                          participant.Is_Payment_Completed
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {participant.Is_Payment_Completed ? 'Paid' : 'Unpaid'}
+                      </span>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Email:</span>
+                        <span className="text-[#2B1341] font-medium text-xs break-all">{participant.ParticipantDetails.Email}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Contact:</span>
+                        <span className="text-[#2B1341] font-medium">{participant.ParticipantDetails.Contact_Number}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Marathon:</span>
+                        <span className="text-[#2B1341] font-medium text-right">{participant.Marathon.Name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Type:</span>
+                        <span className="text-[#2B1341] font-medium">{participant.Marathon_Type}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">T-Shirt:</span>
+                        <span className="text-[#2B1341] font-medium">{participant.ParticipantDetails.Tshirt_Size}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>

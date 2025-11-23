@@ -112,66 +112,121 @@ export default function MarathonsPage() {
             </button>
           </div>
 
-          {/* Marathons Table */}
+          {/* Marathons Table - Desktop */}
           {isLoading ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC]">
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC]">
               <div className="text-center text-[#2B1341]/70">Loading marathons...</div>
             </div>
           ) : marathons.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC] text-center">
-              <Trophy className="w-16 h-16 text-[#F8C8DC] mx-auto mb-4" />
-              <p className="text-[#2B1341]/70">No marathons found. Create your first marathon!</p>
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC] text-center">
+              <Trophy className="w-12 h-12 md:w-16 md:h-16 text-[#F8C8DC] mx-auto mb-4" />
+              <p className="text-sm md:text-base text-[#2B1341]/70">No marathons found. Create your first marathon!</p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
-                    <tr>
-                      <th className="px-6 py-4 text-left font-semibold">Name</th>
-                      <th className="px-6 py-4 text-left font-semibold">Track Length</th>
-                      <th className="px-6 py-4 text-left font-semibold">Date</th>
-                      <th className="px-6 py-4 text-left font-semibold">Location</th>
-                      <th className="px-6 py-4 text-left font-semibold">Fees</th>
-                      <th className="px-6 py-4 text-center font-semibold">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {marathons.map((marathon) => (
-                      <tr key={marathon.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
-                        <td className="px-6 py-4 font-medium text-[#2B1341]">{marathon.Name}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{marathon.Track_Length}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">
-                          {new Date(marathon.Date).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{marathon.Location}</td>
-                        <td className="px-6 py-4 text-[#640D5F] font-semibold">
-                          ₹{parseFloat(marathon.Fees_Amount).toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => handleEdit(marathon)}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                              title="Edit"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(marathon.Id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-semibold">Name</th>
+                        <th className="px-6 py-4 text-left font-semibold">Track Length</th>
+                        <th className="px-6 py-4 text-left font-semibold">Date</th>
+                        <th className="px-6 py-4 text-left font-semibold">Location</th>
+                        <th className="px-6 py-4 text-left font-semibold">Fees</th>
+                        <th className="px-6 py-4 text-center font-semibold">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {marathons.map((marathon) => (
+                        <tr key={marathon.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
+                          <td className="px-6 py-4 font-medium text-[#2B1341]">{marathon.Name}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{marathon.Track_Length}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">
+                            {new Date(marathon.Date).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{marathon.Location}</td>
+                          <td className="px-6 py-4 text-[#640D5F] font-semibold">
+                            ₹{parseFloat(marathon.Fees_Amount).toFixed(2)}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleEdit(marathon)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="Edit"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(marathon.Id)}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-4">
+                {marathons.map((marathon) => (
+                  <div
+                    key={marathon.Id}
+                    className="bg-white rounded-2xl border-2 border-[#F8C8DC] p-4 space-y-3"
+                  >
+                    <div className="flex items-start justify-between">
+                      <h3 className="font-bold text-lg text-[#2B1341] flex-1">{marathon.Name}</h3>
+                      <div className="flex items-center gap-2 ml-2">
+                        <button
+                          onClick={() => handleEdit(marathon)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(marathon.Id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Track Length:</span>
+                        <span className="text-[#2B1341] font-medium">{marathon.Track_Length}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Date:</span>
+                        <span className="text-[#2B1341] font-medium">
+                          {new Date(marathon.Date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Location:</span>
+                        <span className="text-[#2B1341] font-medium">{marathon.Location}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Fees:</span>
+                        <span className="text-[#640D5F] font-semibold">
+                          ₹{parseFloat(marathon.Fees_Amount).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>

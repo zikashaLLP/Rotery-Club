@@ -107,62 +107,116 @@ export default function ResultsPage() {
 
           {/* Results Table */}
           {isLoading ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC]">
-              <div className="text-center text-[#2B1341]/70">Loading results...</div>
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC]">
+              <div className="text-center text-sm md:text-base text-[#2B1341]/70">Loading results...</div>
             </div>
           ) : results.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC] text-center">
-              <Award className="w-16 h-16 text-[#F8C8DC] mx-auto mb-4" />
-              <p className="text-[#2B1341]/70">No results found. Add your first result!</p>
+            <div className="bg-white rounded-2xl p-4 md:p-8 border-2 border-[#F8C8DC] text-center">
+              <Award className="w-12 h-12 md:w-16 md:h-16 text-[#F8C8DC] mx-auto mb-4" />
+              <p className="text-sm md:text-base text-[#2B1341]/70">No results found. Add your first result!</p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
-                    <tr>
-                      <th className="px-6 py-4 text-left font-semibold">BIB Number</th>
-                      <th className="px-6 py-4 text-left font-semibold">Name</th>
-                      <th className="px-6 py-4 text-left font-semibold">Gender</th>
-                      <th className="px-6 py-4 text-left font-semibold">Category</th>
-                      <th className="px-6 py-4 text-left font-semibold">Position</th>
-                      <th className="px-6 py-4 text-left font-semibold">Race Time</th>
-                      <th className="px-6 py-4 text-center font-semibold">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results.map((result) => (
-                      <tr key={result.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
-                        <td className="px-6 py-4 font-medium text-[#640D5F]">{result.BIB_Number}</td>
-                        <td className="px-6 py-4 text-[#2B1341]">{result.Name}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{result.Gender}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{result.Category}</td>
-                        <td className="px-6 py-4 text-[#640D5F] font-semibold">{result.Position}</td>
-                        <td className="px-6 py-4 text-[#2B1341]/70">{result.Race_Time}</td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => handleEdit(result)}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                              title="Edit"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(result.Id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block bg-white rounded-2xl border-2 border-[#F8C8DC] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-[#640D5F] to-[#D91656] text-white">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-semibold">BIB Number</th>
+                        <th className="px-6 py-4 text-left font-semibold">Name</th>
+                        <th className="px-6 py-4 text-left font-semibold">Gender</th>
+                        <th className="px-6 py-4 text-left font-semibold">Category</th>
+                        <th className="px-6 py-4 text-left font-semibold">Position</th>
+                        <th className="px-6 py-4 text-left font-semibold">Race Time</th>
+                        <th className="px-6 py-4 text-center font-semibold">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {results.map((result) => (
+                        <tr key={result.Id} className="border-t border-[#F8C8DC] hover:bg-[#FFF1F5]">
+                          <td className="px-6 py-4 font-medium text-[#640D5F]">{result.BIB_Number}</td>
+                          <td className="px-6 py-4 text-[#2B1341]">{result.Name}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{result.Gender}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{result.Category}</td>
+                          <td className="px-6 py-4 text-[#640D5F] font-semibold">{result.Position}</td>
+                          <td className="px-6 py-4 text-[#2B1341]/70">{result.Race_Time}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleEdit(result)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="Edit"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(result.Id)}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-4">
+                {results.map((result) => (
+                  <div
+                    key={result.Id}
+                    className="bg-white rounded-2xl border-2 border-[#F8C8DC] p-4 space-y-3"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-base text-[#2B1341]">{result.Name}</h3>
+                        <p className="text-sm text-[#640D5F] font-medium mt-1">BIB: {result.BIB_Number}</p>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <button
+                          onClick={() => handleEdit(result)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(result.Id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Gender:</span>
+                        <span className="text-[#2B1341] font-medium">{result.Gender}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Category:</span>
+                        <span className="text-[#2B1341] font-medium">{result.Category}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Position:</span>
+                        <span className="text-[#640D5F] font-semibold">{result.Position}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#2B1341]/70">Race Time:</span>
+                        <span className="text-[#2B1341] font-medium">{result.Race_Time}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>
