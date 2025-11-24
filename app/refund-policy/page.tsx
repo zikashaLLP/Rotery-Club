@@ -119,7 +119,7 @@ export default function RefundPolicyPage() {
                 <ol className="list-decimal list-inside space-y-2 ml-4">
                   <li>
                     Submit a written refund request via email to <strong>hiteshvis@gmail.com</strong> 
-                    with the subject line &quot;Refund Request - [Your Registration ID]&quot;
+                    with the subject line &quot;Refund Request - Your Registration ID&quot;
                   </li>
                   <li>
                     Include the following information in your request:
