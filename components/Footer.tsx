@@ -11,6 +11,9 @@ const Footer = () => {
     { label: 'About', href: '/about-the-run' },
     { label: 'Results', href: '/results' },
     { label: 'Contact', href: '/#contact' },
+    { label: 'Terms & Conditions', href: '/terms-and-conditions' },
+    { label: 'Refund Policy', href: '/refund-policy' },
+    { label: 'Privacy Policy', href: '/privacy-policy' },
   ]
 
   const socialLinks = [
@@ -64,9 +67,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Contact</h3>
             <ul className="space-y-2 text-white/80 text-sm">
-              <li>Email: contact@rotaryvisnagar.org</li>
-              <li>Phone: +91 98765 43210</li>
-              <li>Address: Rotary Club of Visnagar</li>
+              <li>Email: hiteshvis@gmail.com</li>
+              <li>Phone: +91 9898980978</li>
+              <li>Address: Rotary Bhavan, Rushikesh Market, Opp. Nootan School, NA, Visnagar, Gujarat, India. Pincode - 384315</li>
             </ul>
           </div>
 

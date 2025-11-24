@@ -279,7 +279,7 @@ export default function Home() {
           </motion.div>
 
           {/* Three Column Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="hidden grid md:grid-cols-3 gap-6 mt-12">
             {[
               { icon: Heart, title: 'Cervical Cancer Awareness', color: '#D91656' },
               { icon: Users, title: 'Community Health Initiative', color: '#640D5F' },
@@ -480,21 +480,21 @@ export default function Home() {
                 <PhoneCall className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">WhatsApp</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">+91 98765 43210</p>
+                  <p className="text-lg font-semibold text-[#2B1341]">+91 9898980978</p>
                 </div>
               </div>
               <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-3 shadow-sm flex items-center gap-4">
                 <Mail className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">Email</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">contact@rotaryvisnagar.org</p>
+                  <p className="text-lg font-semibold text-[#2B1341]">hiteshvis@gmail.com</p>
                 </div>
               </div>
               <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-3 shadow-sm flex items-center gap-4">
                 <MapPin className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">Address</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">Rotary Club of Visnagar</p>
+                  <p className="text-lg font-semibold text-[#2B1341]">Rotary Bhavan, Rushikesh Market,<br />Opp. Nootan School, NA, Visnagar,<br />Gujarat, India. Pincode - 384315</p>
                 </div>
               </div>
             </div>
