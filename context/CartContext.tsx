@@ -23,7 +23,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     originalPrice: 2100,
     discountedPrice: 1575,
     discount: 25,
-    description: 'This ticket entitles you for participation in Miracle Miles - 20 Miler Run (32 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
+    description: 'This registration receipt entitles you for participation in Miracle Miles - 20 Miler Run (32 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
     quantity: 1,
   },
   {
@@ -33,7 +33,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     originalPrice: 1600,
     discountedPrice: 1200,
     discount: 25,
-    description: 'This ticket entitles you for participation in Hope Half Marathon (21.0975 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
+    description: 'This registration receipt entitles you for participation in Hope Half Marathon (21.0975 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
     quantity: 1,
   },
   {
@@ -43,7 +43,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     originalPrice: 1200,
     discountedPrice: 900,
     discount: 25,
-    description: 'This ticket entitles you for participation in Life Sprint 10K Run and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
+    description: 'This registration receipt entitles you for participation in Life Sprint 10K Run and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
     quantity: 1,
   },
   {
@@ -53,7 +53,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     originalPrice: 750,
     discountedPrice: 562.5,
     discount: 25,
-    description: 'This ticket entitles you for participation in Save A Life 5KM Run and you will get an Event T-Shirt + Finisher Medal + BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
+    description: 'This registration receipt entitles you for participation in Save A Life 5KM Run and you will get an Event T-Shirt + Finisher Medal + BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
     quantity: 1,
   },
 ]

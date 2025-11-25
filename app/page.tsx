@@ -94,7 +94,7 @@ export default function Home() {
                   Run for Cervical Cancer Awareness
                 </p>
                 <p className="text-lg text-[#2B1341]/80">
-                  Powered by Velox Group
+                  Organized by Rotary Club Visnagar
                 </p>
               </motion.div>
 

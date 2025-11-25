@@ -20,7 +20,7 @@ export default function RegisterPage() {
 
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
-      alert('Please select at least one ticket')
+      alert('Please select at least one registration receipt')
       return
     }
     // Navigate to checkout page
@@ -121,7 +121,7 @@ export default function RegisterPage() {
         </motion.div>
 
         <div className="md:flex md:gap-6 lg:gap-8">
-          {/* Left Section - Tickets */}
+          {/* Left Section - Registration Receipts */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}

@@ -24,7 +24,7 @@ const TicketSummaryCard: React.FC<TicketSummaryCardProps> = ({
           No Items Added
         </span>
         <p className="text-sm text-[#2B1341]/60 mt-2">
-          Select tickets to see your summary
+          Select registration receipts to see your summary
         </p>
       </div>
     )
@@ -32,12 +32,18 @@ const TicketSummaryCard: React.FC<TicketSummaryCardProps> = ({
 
   return (
     <div className="p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 bg-gradient-to-br from-[#D91656] to-[#EB5B00] rounded-full flex items-center justify-center">
-          <ShoppingBag className="w-4 h-4 text-white" />
-        </div>
-        <h3 className="font-bold text-xl text-[#640D5F]">Ticket Summary</h3>
-      </div>
+      <div className="flex items-center gap-2 mb-2">
+  <div className="w-8 h-8 bg-gradient-to-br from-[#D91656] to-[#EB5B00]
+                  rounded-full flex items-center justify-center">
+    <ShoppingBag className="w-4 h-4 text-white" />
+  </div>
+
+  <h3 className="font-bold text-xl text-[#640D5F] leading-none flex items-center pt-[1px]">
+  Registration Receipt Summary
+</h3>
+
+</div>
+
       
       <div className="space-y-4 mb-6">
         {selectedTickets.map(ticket => (

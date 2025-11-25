@@ -15,7 +15,7 @@ export interface ParticipantDetails {
   city: string
   pincode: string
   state: string
-  tShirtSize: 'XXS-34' | 'XS-36' | 'S-38' | 'M-40' | 'L-42' | 'XL-44' | 'XXL-46' | 'Child Size 10 to 12 Years - 32' | ''
+  tShirtSize: 'XS-34' | 'S-36' | 'M-38' | 'L-40' | 'XL-42' | 'XXL-44' | '3XL-46' | ''
   bloodGroup: string
   runningClub: string
   disclaimerAccepted: string // 'yes' when the waiver checkbox is ticked, '' otherwise

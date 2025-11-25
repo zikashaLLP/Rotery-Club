@@ -60,7 +60,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
               <div className="w-20 h-9 bg-white border-2 border-[#640D5F] rounded-lg font-bold flex items-center justify-between px-2 text-sm shadow-sm">
                 <button
                   onClick={() => onRemove(ticket.id)}
-                  aria-label="Remove ticket"
+                  aria-label="Remove registration receipt"
                   disabled={ticket.quantity <= 1}
                   className={`w-4 h-4 rounded flex items-center justify-center text-xs transition-colors ${
                     ticket.quantity <= 1
@@ -73,7 +73,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
                 <span className="text-xs text-[#640D5F] font-bold">{ticket.quantity}</span>
                 <button
                   onClick={() => onAdd(ticket.id)}
-                  aria-label="Add ticket"
+                  aria-label="Add registration receipt"
                   className="w-4 h-4 bg-[#640D5F] text-white rounded flex items-center justify-center text-xs hover:bg-[#D91656] transition-colors"
                 >
                   +

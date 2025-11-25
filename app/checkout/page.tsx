@@ -151,13 +151,13 @@ export default function CheckoutPage() {
         <div className="md:flex md:gap-6 lg:gap-8 justify-center">
           {/* Left Section - Form */}
           <div className="section-left mb-6 md:mb-0 w-full md:min-w-[600px] md:max-w-[800px]">
-            {/* Grouped by Ticket Type */}
+            {/* Grouped by Registration Receipt Type */}
             {Array.from(new Set(participants.map(p => p.ticketName))).map((ticketName) => {
               const ticketParticipants = participants.filter(p => p.ticketName === ticketName)
               
               return (
                 <div key={ticketName} className="mb-8">
-                  {/* Ticket Type Header */}
+                  {/* Registration Receipt Type Header */}
                   <div className="text-lg font-bold leading-none mb-4 text-text-primary">
                     {ticketName}
                   </div>
