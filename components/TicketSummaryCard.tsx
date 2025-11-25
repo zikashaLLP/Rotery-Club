@@ -32,7 +32,7 @@ const TicketSummaryCard: React.FC<TicketSummaryCardProps> = ({
 
   return (
     <div className="p-6">
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 mb-6">
   <div className="w-8 h-8 bg-gradient-to-br from-[#D91656] to-[#EB5B00]
                   rounded-full flex items-center justify-center">
     <ShoppingBag className="w-4 h-4 text-white" />
