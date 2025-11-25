@@ -5,39 +5,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, MapPin, PhoneCall, Mail, Map, X, Download, Heart, Users, Activity } from 'lucide-react'
-import { API_BASE_URL } from '@/lib/config'
 import PosterAwarenessSection from '@/components/PosterAwarenessSection'
 
 const marathonDate = new Date('2025-12-28T05:00:00+05:30')
 
-interface MarathonCategory {
-  Id: number
-  Name: string
-  Track_Length: string
-  Run_Start_Time: string
-  Fees_Amount: string
-  Description: string
-  Location: string
-  Date: string
-}
-
-const sponsorLogos = [
-  {
-    name: 'Rotary Club',
-    image: '/rotary-club-logo.jpeg',
-  },
-  {
-    name: 'Sankalchand',
-    image: '/sankalchand-logo.png',
-  },
-]
-
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-  const [raceCategories, setRaceCategories] = useState<MarathonCategory[]>([])
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true)
   const [isMapModalOpen, setIsMapModalOpen] = useState(false)
-  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' })
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,34 +34,6 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    const fetchRaceCategories = async () => {
-      try {
-        setIsLoadingCategories(true)
-        const response = await fetch(`${API_BASE_URL}/api/marathon`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'true',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch race categories')
-        }
-
-        const data = await response.json()
-        if (data.success && data.data) {
-          setRaceCategories(data.data)
-        }
-      } catch (error) {
-        console.error('Error fetching race categories:', error)
-      } finally {
-        setIsLoadingCategories(false)
-      }
-    }
-
-    fetchRaceCategories()
-  }, [])
-
   const countdownItems = useMemo(
     () => [
       { label: 'Days', value: timeLeft.days },
@@ -103,14 +49,6 @@ export default function Home() {
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Connect to backend API
-    console.log('Contact form submitted:', contactForm)
-    alert('Thank you for your message! We will get back to you soon.')
-    setContactForm({ name: '', email: '', message: '' })
   }
 
   return (
@@ -156,7 +94,7 @@ export default function Home() {
                   Run for Cervical Cancer Awareness
                 </p>
                 <p className="text-lg text-[#2B1341]/80">
-                  Organized by Rotary Club of Visnagar
+                  Powered by Velox Group
                 </p>
               </motion.div>
 
@@ -217,12 +155,12 @@ export default function Home() {
                 >
                   Register Now
                 </Link>
-                <button
-                  onClick={() => handleScroll('categories')}
+                <Link
+                  href="/race-details"
                   className="px-8 py-4 border-2 border-[#640D5F] text-[#640D5F] font-semibold rounded-full hover:bg-[#640D5F] hover:text-white transition"
                 >
-                  View Categories
-                </button>
+                  Race Details
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -279,7 +217,7 @@ export default function Home() {
           </motion.div>
 
           {/* Three Column Cards */}
-          <div className="hidden grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid md:grid-cols-3 gap-6 mt-12">
             {[
               { icon: Heart, title: 'Cervical Cancer Awareness', color: '#D91656' },
               { icon: Users, title: 'Community Health Initiative', color: '#640D5F' },
@@ -305,79 +243,6 @@ export default function Home() {
 
       {/* POSTER AWARENESS SECTION */}
       <PosterAwarenessSection />
-
-      {/* 3. RACE CATEGORIES SECTION */}
-      <section id="categories" className="py-16 md:py-20 bg-[#FFF1F5]">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-center text-[#640D5F] mb-12"
-          >
-            Race Categories
-          </motion.h2>
-          {isLoadingCategories ? (
-            <div className="text-center py-12">
-              <p className="text-[#2B1341]/70">Loading race categories...</p>
-            </div>
-          ) : raceCategories.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-[#2B1341]/70">No race categories available</p>
-            </div>
-          ) : (
-            <div
-              className={`grid gap-6 ${
-                raceCategories.length === 2
-                  ? 'md:grid-cols-2 max-w-2xl mx-auto'
-                  : raceCategories.length === 3
-                  ? 'md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto'
-                  : 'md:grid-cols-2 lg:grid-cols-4'
-              }`}
-            >
-              {raceCategories.map((race, idx) => {
-                const formatTime = (timeString: string) => {
-                  if (!timeString) return 'TBA'
-                  const time = timeString.split(':')
-                  if (time.length >= 2) {
-                    const hour = parseInt(time[0])
-                    const minute = time[1]
-                    const ampm = hour >= 12 ? 'PM' : 'AM'
-                    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour
-                    return `Start ${displayHour}:${minute} ${ampm}`
-                  }
-                  return timeString
-                }
-
-                return (
-                  <motion.div
-                    key={race.Id}
-                    className="bg-white rounded-3xl p-6 border-2 border-[#F8C8DC] shadow-lg"
-                    whileHover={{ scale: 1.03, boxShadow: '0 20px 45px rgba(235, 91, 0, 0.3)' }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                  >
-                    <div className="text-sm uppercase tracking-[0.2em] text-[#FFB200] mb-3 font-bold">
-                      Entry Fee: ₹{race.Fees_Amount}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2 text-[#2B1341]">
-                      {race.Name}
-                    </h3>
-                    <p className="text-[#640D5F] mb-2 text-sm">Track: {race.Track_Length}</p>
-                    <p className="text-[#2B1341]/80 mb-4 text-sm">{formatTime(race.Run_Start_Time)}</p>
-                    <Link
-                      href="/race-details"
-                      className="block w-full text-center text-sm font-semibold px-4 py-2 rounded-full border-2 border-[#D91656] text-[#D91656] hover:bg-[#D91656] hover:text-white transition"
-                    >
-                      Know More
-                    </Link>
-                  </motion.div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      </section>
 
       {/* 4. ROUTE MAP TEASER */}
       <section id="route" className="py-14 md:py-20 bg-[#FFF7EB]">
@@ -423,122 +288,70 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. EVENT SPONSORS SECTION */}
-      <section className="py-16 bg-[#FFF1F5]" id="sponsors">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-[#640D5F]">Main Sponsor</h2>
-          
-          {/* Main Sponsor Card */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-white rounded-xl p-6 border-2 border-[#F8C8DC] shadow-lg">
-              <Image
-                src="/sankalchand-logo.png"
-                alt="Sankalchand Patel University"
-                width={200}
-                height={100}
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Other Sponsors - Infinite Scroll */}
-          <h3 className="text-2xl font-bold text-center mb-6 text-[#640D5F]">Our Sponsors</h3>
-          <div className="overflow-hidden">
-            <motion.div
-              className="flex gap-12 items-center"
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
-            >
-              {[...sponsorLogos, ...sponsorLogos, ...sponsorLogos].map((logo, idx) => (
-                <div
-                  key={`${logo.name}-${idx}`}
-                  className="flex-shrink-0 w-48 h-24 rounded-xl bg-white border-2 border-[#F8C8DC] flex items-center justify-center p-4 shadow-sm"
-                >
-                  <Image
-                    src={logo.image}
-                    alt={logo.name}
-                    width={160}
-                    height={80}
-                    className="object-contain max-w-full max-h-full"
-                  />
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* 6. CONTACT DETAILS SECTION */}
       <section id="contact" className="py-16 bg-[#FFF7EB]">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-[#640D5F] text-center">Contact Us</h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Contact Info Cards */}
-            <div className="space-y-4">
-              <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-3 shadow-sm flex items-center gap-4">
-                <PhoneCall className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
-                <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">WhatsApp</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">+91 9898980978</p>
+          <div className="max-w-2xl mx-auto space-y-4">
+            {/* Contact Persons */}
+            <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-4 shadow-sm">
+              <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70 mb-4">Contact Persons</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Gajendrabhai Doshi</span>
+                  </div>
+                  <a href="tel:+919328291321" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9328291321</a>
                 </div>
-              </div>
-              <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-3 shadow-sm flex items-center gap-4">
-                <Mail className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
-                <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">Email</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">hiteshvis@gmail.com</p>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Hitesh Raval</span>
+                  </div>
+                  <a href="tel:+919898980978" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9898980978</a>
                 </div>
-              </div>
-              <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-3 shadow-sm flex items-center gap-4">
-                <MapPin className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
-                <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-[#640D5F]/70">Address</p>
-                  <p className="text-lg font-semibold text-[#2B1341]">Rotary Bhavan, Rushikesh Market,<br />Opp. Nootan School, NA, Visnagar,<br />Gujarat, India. Pincode - 384315</p>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Shailesh Patel</span>
+                  </div>
+                  <a href="tel:+919898129810" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9898129810</a>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Sanjay Patel</span>
+                  </div>
+                  <a href="tel:+919825100599" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9825100599</a>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-3">
+                    <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Rakesh Patel</span>
+                  </div>
+                  <a href="tel:+919824515174" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9824515174</a>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="bg-white rounded-2xl p-6 border-2 border-[#FDD48F] shadow-sm">
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-[#2B1341] mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                    className="w-full px-4 py-2 border border-[#F8C8DC] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#640D5F]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#2B1341] mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                    className="w-full px-4 py-2 border border-[#F8C8DC] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#640D5F]"
-                    required
-                  />
+            {/* Address */}
+            <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 pt-2 pb-1 shadow-sm flex items-center gap-4">
+              <MapPin className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-[#640D5F]/70 mb-0.5">Address</p>
+                <p className="text-base font-semibold text-[#2B1341] mb-0">Rotary Club of Visnagar<br />"Rotary Bhavan" Opp/ Nootan School<br />Visnagar – 384315</p>
+              </div>
             </div>
-            <div>
-                  <label className="block text-sm font-medium text-[#2B1341] mb-1">Message</label>
-                  <textarea
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    rows={4}
-                    className="w-full px-4 py-2 border border-[#F8C8DC] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#640D5F]"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full px-6 py-3 bg-[#D91656] text-white font-semibold rounded-lg hover:bg-[#EB5B00] transition"
-                >
-                  Submit
-                </button>
-              </form>
+
+            {/* Email */}
+            <div className="bg-white border-2 border-[#FDD48F] rounded-2xl px-4 py-2 shadow-sm flex items-center gap-4">
+              <Mail className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-[#640D5F]/70 mb-0.5">Email</p>
+                <a href="mailto:rotaryvisnagar@gmail.com" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors mb-0 block">rotaryvisnagar@gmail.com</a>
+              </div>
             </div>
           </div>
         </div>

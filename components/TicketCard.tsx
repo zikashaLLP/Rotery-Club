@@ -61,7 +61,12 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
                 <button
                   onClick={() => onRemove(ticket.id)}
                   aria-label="Remove ticket"
-                  className="w-4 h-4 bg-[#640D5F] text-white rounded flex items-center justify-center text-xs hover:bg-[#D91656] transition-colors"
+                  disabled={ticket.quantity <= 1}
+                  className={`w-4 h-4 rounded flex items-center justify-center text-xs transition-colors ${
+                    ticket.quantity <= 1
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#640D5F] text-white hover:bg-[#D91656]'
+                  }`}
                 >
                   &minus;
                 </button>
@@ -139,7 +144,12 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
               <button
                 onClick={() => onRemove(ticket.id)}
                 aria-label="Remove ticket"
-                className="w-6 h-6 bg-[#640D5F] text-white rounded-md flex items-center justify-center text-sm hover:bg-[#D91656] transition-colors"
+                disabled={ticket.quantity <= 1}
+                className={`w-6 h-6 rounded-md flex items-center justify-center text-sm transition-colors ${
+                  ticket.quantity <= 1
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-[#640D5F] text-white hover:bg-[#D91656]'
+                }`}
               >
                 &minus;
               </button>

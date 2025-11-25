@@ -7,12 +7,14 @@ import { apiCall } from '@/lib/api'
 import { BarChart3, Shirt, DollarSign } from 'lucide-react'
 
 interface TShirtSizeReport {
-  XS: number
-  S: number
-  M: number
-  L: number
-  XL: number
-  XXL: number
+  'XXS-34': number
+  'XS-36': number
+  'S-38': number
+  'M-40': number
+  'L-42': number
+  'XL-44': number
+  'XXL-46': number
+  'Child Size 10 to 12 Years - 32': number
   total: number
 }
 
@@ -94,7 +96,7 @@ export default function ReportsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMarathonId])
 
-  const tshirtSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+  const tshirtSizes = ['XXS-34', 'XS-36', 'S-38', 'M-40', 'L-42', 'XL-44', 'XXL-46', 'Child Size 10 to 12 Years - 32']
   const maxTshirtCount = tshirtReport
     ? Math.max(...tshirtSizes.map((size) => tshirtReport[size as keyof TShirtSizeReport] as number))
     : 0

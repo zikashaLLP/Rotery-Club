@@ -24,7 +24,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     discountedPrice: 1575,
     discount: 25,
     description: 'This ticket entitles you for participation in Miracle Miles - 20 Miler Run (32 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
-    quantity: 0,
+    quantity: 1,
   },
   {
     id: '2',
@@ -34,7 +34,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     discountedPrice: 1200,
     discount: 25,
     description: 'This ticket entitles you for participation in Hope Half Marathon (21.0975 KM) and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
-    quantity: 0,
+    quantity: 1,
   },
   {
     id: '3',
@@ -44,7 +44,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     discountedPrice: 900,
     discount: 25,
     description: 'This ticket entitles you for participation in Life Sprint 10K Run and you will get an Event T-Shirt + Finisher Medal + Timing BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
-    quantity: 0,
+    quantity: 1,
   },
   {
     id: '4',
@@ -54,7 +54,7 @@ const FALLBACK_TICKETS: Ticket[] = [
     discountedPrice: 562.5,
     discount: 25,
     description: 'This ticket entitles you for participation in Save A Life 5KM Run and you will get an Event T-Shirt + Finisher Medal + BIB + On-Route Hydration Support + Post-run Refreshment + E-Certificate',
-    quantity: 0,
+    quantity: 1,
   },
 ]
 
@@ -83,7 +83,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             discountedPrice: Number(item.Fees_Amount) || 0,
             discount: 0,
             description: item.Description ?? '',
-            quantity: 0,
+            quantity: 1,
           }))
           setTickets(apiTickets)
         }
@@ -102,7 +102,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setTickets(prevTickets =>
       prevTickets.map(ticket =>
         ticket.id === ticketId
-          ? { ...ticket, quantity: ticket.quantity + 1 }
+          ? { ...ticket, quantity: ticket.quantity === 0 ? 1 : ticket.quantity + 1 }
           : ticket
       )
     )
@@ -111,7 +111,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const removeTicket = useCallback((ticketId: string) => {
     setTickets(prevTickets =>
       prevTickets.map(ticket =>
-        ticket.id === ticketId && ticket.quantity > 0
+        ticket.id === ticketId && ticket.quantity > 1
           ? { ...ticket, quantity: ticket.quantity - 1 }
           : ticket
       )

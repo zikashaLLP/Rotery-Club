@@ -183,8 +183,8 @@ export default function RaceDetailsPage() {
             {/* Tab Content */}
             {currentMarathon && (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                {/* Sidebar Navigation */}
-                <div className="md:col-span-4">
+                {/* Sidebar Navigation - Hidden */}
+                <div className="md:col-span-4 hidden">
                   <div className="bg-white rounded-2xl p-6 border-2 border-[#F8C8DC] shadow-lg sticky top-24">
                     <ul className="space-y-2">
                       {sections.map((section) => (
@@ -210,8 +210,8 @@ export default function RaceDetailsPage() {
                   </div>
                 </div>
 
-                {/* Content Area */}
-                <div className="md:col-span-8">
+                {/* Content Area - Full Width */}
+                <div className="md:col-span-12">
                   <div className="bg-white rounded-2xl p-8 border-2 border-[#F8C8DC] shadow-lg">
                     {/* Info Section */}
                     {isSectionActive(activeTab, 'Info') && (

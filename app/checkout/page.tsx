@@ -49,11 +49,8 @@ export default function CheckoutPage() {
       participant.gender &&
       participant.tShirtSize &&
       participant.dateOfBirth &&
-      participant.address?.trim() &&
       participant.city?.trim() &&
       participant.pincode?.trim() &&
-      participant.state?.trim() &&
-      participant.bloodGroup?.trim() &&
       participant.disclaimerAccepted === 'yes'
     )
   }
@@ -218,7 +215,7 @@ export default function CheckoutPage() {
                               <div className="flex items-center gap-2">
                                 <i className="mdi mdi-account-edit text-primary text-xl"></i>
                                 <span className="font-medium text-text-primary">
-                                  Attendee {globalIndex + 1} Details
+                                  Enter Participant {globalIndex + 1} Details
                                 </span>
                               </div>
                               {isExpanded ? (

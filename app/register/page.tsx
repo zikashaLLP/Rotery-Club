@@ -81,10 +81,10 @@ export default function RegisterPage() {
           {/* Mobile Title - Simplified */}
           <div className="block md:hidden px-4">
             <h1 className="text-xl font-bold text-[#640D5F] mb-2">
-              Choose Your Race Category
+              Register for the Run
             </h1>
             <p className="text-[#2B1341]/80 text-sm">
-              Select your category and register
+              Join the official 5 KM Cervical Cancer Awareness Run.
             </p>
           </div>
 
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                 <Activity className="w-6 h-6 text-white" />
               </motion.div>
               <h1 className="text-3xl lg:text-4xl font-bold text-[#640D5F]">
-                Choose Your Race Category
+                Register for the Run
               </h1>
               <motion.div
                 animate={{ rotate: [0, -10, 10, 0] }}
@@ -110,7 +110,7 @@ export default function RegisterPage() {
               </motion.div>
             </div>
             <p className="text-[#2B1341]/80 text-lg">
-              Select your preferred marathon category and register now
+              Join the official 5 KM Cervical Cancer Awareness Run.
             </p>
             <div className="flex items-center justify-center gap-2 mt-3">
               <div className="w-2 h-2 bg-[#D91656] rounded-full"></div>

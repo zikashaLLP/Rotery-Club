@@ -139,24 +139,6 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
         </div>
       </div>
 
-      {/* Address */}
-      <div className="my-6">
-        <div className="mat-form-field">
-          <div className="mb-2">
-            <span className="text-sm text-text-primary font-medium">Address</span>
-            <span className="align-top text-error text-sm ml-1">*</span>
-          </div>
-          <textarea
-            value={participant.address}
-            onChange={(e) => onUpdate(participantIndex, 'address', e.target.value)}
-            rows={3}
-            placeholder="Enter your complete address"
-            className={cn('mat-input resize-none', errors.address && 'error')}
-          />
-          {errors.address && <span className="mat-error">{errors.address}</span>}
-        </div>
-      </div>
-
       {/* City and Pincode - Side by side */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
         <Input
@@ -182,59 +164,8 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
         />
       </div>
 
-      {/* State and T-Shirt Size - Side by side */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-        <div className="mat-form-field">
-          <div className="mb-2">
-            <span className="text-sm text-text-primary font-medium">State (India)</span>
-            <span className="align-top text-error text-sm ml-1">*</span>
-          </div>
-          <select
-            value={participant.state}
-            onChange={(e) => onUpdate(participantIndex, 'state', e.target.value)}
-            className={cn('mat-select', errors.state && 'error')}
-          >
-            <option value="">Select State</option>
-            <option value="Andhra Pradesh">Andhra Pradesh</option>
-            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-            <option value="Assam">Assam</option>
-            <option value="Bihar">Bihar</option>
-            <option value="Chhattisgarh">Chhattisgarh</option>
-            <option value="Goa">Goa</option>
-            <option value="Gujarat">Gujarat</option>
-            <option value="Haryana">Haryana</option>
-            <option value="Himachal Pradesh">Himachal Pradesh</option>
-            <option value="Jharkhand">Jharkhand</option>
-            <option value="Karnataka">Karnataka</option>
-            <option value="Kerala">Kerala</option>
-            <option value="Madhya Pradesh">Madhya Pradesh</option>
-            <option value="Maharashtra">Maharashtra</option>
-            <option value="Manipur">Manipur</option>
-            <option value="Meghalaya">Meghalaya</option>
-            <option value="Mizoram">Mizoram</option>
-            <option value="Nagaland">Nagaland</option>
-            <option value="Odisha">Odisha</option>
-            <option value="Punjab">Punjab</option>
-            <option value="Rajasthan">Rajasthan</option>
-            <option value="Sikkim">Sikkim</option>
-            <option value="Tamil Nadu">Tamil Nadu</option>
-            <option value="Telangana">Telangana</option>
-            <option value="Tripura">Tripura</option>
-            <option value="Uttar Pradesh">Uttar Pradesh</option>
-            <option value="Uttarakhand">Uttarakhand</option>
-            <option value="West Bengal">West Bengal</option>
-            <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-            <option value="Chandigarh">Chandigarh</option>
-            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-            <option value="Delhi">Delhi</option>
-            <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-            <option value="Ladakh">Ladakh</option>
-            <option value="Lakshadweep">Lakshadweep</option>
-            <option value="Puducherry">Puducherry</option>
-          </select>
-          {errors.state && <span className="mat-error">{errors.state}</span>}
-        </div>
-
+      {/* T-Shirt Size */}
+      <div className="my-6">
         <div className="mat-form-field">
           <div className="mb-2">
             <span className="text-sm text-text-primary font-medium">T-Shirt Size</span>
@@ -246,19 +177,21 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
             className={cn('mat-select', errors.tShirtSize && 'error')}
           >
             <option value="">Select Size</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
+            <option value="XXS-34">XXS-34</option>
+            <option value="XS-36">XS-36</option>
+            <option value="S-38">S-38</option>
+            <option value="M-40">M-40</option>
+            <option value="L-42">L-42</option>
+            <option value="XL-44">XL-44</option>
+            <option value="XXL-46">XXL-46</option>
+            <option value="Child Size 10 to 12 Years - 32">Child Size 10 to 12 Years - 32</option>
           </select>
           {errors.tShirtSize && <span className="mat-error">{errors.tShirtSize}</span>}
         </div>
       </div>
 
-      {/* Date of Birth and Blood Group - Side by side */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+      {/* Date of Birth */}
+      <div className="my-6">
         <Input
           type="date"
           label="Date of Birth"
@@ -266,39 +199,6 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
           onChange={(e) => onUpdate(participantIndex, 'dateOfBirth', e.target.value)}
           error={errors.dateOfBirth}
           required
-        />
-        
-        <div className="mat-form-field">
-          <div className="mb-2">
-            <span className="text-sm text-text-primary font-medium">Blood Group</span>
-            <span className="align-top text-error text-sm ml-1">*</span>
-          </div>
-          <select
-            value={participant.bloodGroup}
-            onChange={(e) => onUpdate(participantIndex, 'bloodGroup', e.target.value)}
-            className={cn('mat-select', errors.bloodGroup && 'error')}
-          >
-            <option value="">Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-          </select>
-          {errors.bloodGroup && <span className="mat-error">{errors.bloodGroup}</span>}
-        </div>
-      </div>
-
-      {/* Running Club / Group */}
-      <div className="my-6">
-        <Input
-          label="Your Running Club / Group (Optional)"
-          placeholder="Enter your running club / group name"
-          value={participant.runningClub}
-          onChange={(e) => onUpdate(participantIndex, 'runningClub', e.target.value)}
         />
       </div>
 

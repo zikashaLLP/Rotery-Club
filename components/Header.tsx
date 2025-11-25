@@ -45,16 +45,6 @@ const Header = () => {
       href: '/about-the-run',
       submenu: null,
     },
-    {
-      label: 'RACE DETAILS',
-      href: '/race-details',
-      submenu: null,
-    },
-    {
-      label: 'RESULTS',
-      href: '/results',
-      submenu: null,
-    },
   ]
 
   const socialLinks = [

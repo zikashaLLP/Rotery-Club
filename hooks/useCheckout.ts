@@ -89,20 +89,11 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
     if (!participant.tShirtSize) {
       newErrors.tShirtSize = 'T-shirt size is required'
     }
-    if (!participant.address.trim()) {
-      newErrors.address = 'Address is required'
-    }
     if (!participant.city.trim()) {
       newErrors.city = 'City is required'
     }
     if (!participant.pincode.trim()) {
       newErrors.pincode = 'Pincode is required'
-    }
-    if (!participant.state.trim()) {
-      newErrors.state = 'State is required'
-    }
-    if (!participant.bloodGroup.trim()) {
-      newErrors.bloodGroup = 'Blood group is required'
     }
     if (participant.disclaimerAccepted !== 'yes') {
       newErrors.disclaimerAccepted = 'You must accept the disclaimer to continue'
@@ -165,12 +156,12 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
           Contact_Number: participant.phone,
           Gender: genderValue,
           Date_of_Birth: participant.dateOfBirth,
-          Address: participant.address,
+          Address: '',
           City: participant.city,
           Pincode: participant.pincode,
-          State: participant.state,
+          State: '',
           Tshirt_Size: participant.tShirtSize,
-          Blood_Group: participant.bloodGroup,
+          Blood_Group: '',
           Is_Terms_Condition_Accepted: participant.disclaimerAccepted === 'yes',
         }
 

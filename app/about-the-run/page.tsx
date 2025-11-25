@@ -95,10 +95,10 @@ export default function AboutTheRunPage() {
               </p>
               
               <p style={{ textAlign: 'justify' }}>
-                The marathon offers one of the most scenic routes in the region, taking runners through the 
-                beautiful landscapes of Visnagar. The race categories include Full Marathon (42.195 KM), 
-                Half Marathon (21.097 KM), 10 KM Run, and 5 KM Run. The marathon has seen increasing and 
-                consistent participation, making it one of the most anticipated community events in the region.
+                The marathon offers a scenic 5 KM route through the beautiful landscapes of Visnagar. This year, 
+                we are organizing only the 5 KM Run, designed to encourage maximum community participation. Over 
+                the years, the event has seen growing involvement, making it one of the most anticipated community 
+                health-awareness activities in the region.
               </p>
               
               <p style={{ textAlign: 'justify' }}>
