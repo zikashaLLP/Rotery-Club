@@ -177,13 +177,13 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
             className={cn('mat-select', errors.tShirtSize && 'error')}
           >
             <option value="">Select Size</option>
-            <option value="XS-34">XS-34</option>
-            <option value="S-36">S-36</option>
-            <option value="M-38">M-38</option>
-            <option value="L-40">L-40</option>
-            <option value="XL-42">XL-42</option>
-            <option value="XXL-44">XXL-44</option>
-            <option value="3XL-46">3XL-46</option>
+            <option value="XS 34">XS 34</option>
+            <option value="S 36">S 36</option>
+            <option value="M 38">M 38</option>
+            <option value="L 40">L 40</option>
+            <option value="XL 42">XL 42</option>
+            <option value="XXL 44">XXL 44</option>
+            <option value="3XL 46">3XL 46</option>
           </select>
           {errors.tShirtSize && <span className="mat-error">{errors.tShirtSize}</span>}
         </div>
