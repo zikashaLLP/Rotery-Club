@@ -93,7 +93,7 @@ export default function Home() {
                 <p className="text-xl md:text-2xl font-semibold text-[#D91656]">
                   Run for Cervical Cancer Awareness
                 </p>
-                <p className="text-lg text-[#2B1341]/80">
+                <p className="text-2xl md:text-3xl font-bold text-[#2B1341]">
                   Organized by Rotary Club Visnagar
                 </p>
               </motion.div>
