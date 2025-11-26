@@ -111,7 +111,7 @@ const PaymentStatusResultClient: React.FC<PaymentStatusResultClientProps> = ({
         ))}
         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
           <p className="text-sm text-blue-800">
-            <span className="font-semibold">Note:</span> Your receipts have been sent via WhatsApp and Email. Kindly check it.
+            <span className="font-semibold">Note:</span> We have sent your receipts via WhatsApp and email. Please check them at your convenience.
           </p>
         </div>
       </div>
