@@ -139,14 +139,14 @@ const Header = () => {
           <div className="container mx-auto px-4 py-2.5">
             <div className="flex items-center justify-between h-18 md:h-20">
               <Link href="/" className="flex items-center h-full">
-                <div className="relative w-40 h-16 md:w-80 md:h-20">
+                <div className="relative w-40 h-16 md:w-60 md:h-20">
                   <Image
-                    src="/website-logo.png"
-                    alt="Visnagar Marathon Logo"
+                    src="/rotary-club-logo.jpeg"
+                    alt="Rotary Club Visnagar Logo"
                     fill
                     className="object-contain object-left"
                     priority
-                    sizes="(max-width: 768px) 180px, 400px"
+                    sizes="(max-width: 768px) 160px, 240px"
                   />
                 </div>
               </Link>
