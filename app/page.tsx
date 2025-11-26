@@ -94,7 +94,7 @@ export default function Home() {
                   Run for Cervical Cancer Awareness
                 </p>
                 <p className="text-2xl md:text-3xl font-bold text-[#2B1341]">
-                  Organized by Rotary Club Visnagar
+                  Organized by Rotary Club of Visnagar
                 </p>
               </motion.div>
 

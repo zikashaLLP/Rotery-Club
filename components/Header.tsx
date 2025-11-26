@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import rotaryClubLogo from '@/assets/images/logos/Rotery Club.jpeg'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -139,14 +140,14 @@ const Header = () => {
           <div className="container mx-auto px-4 py-2.5">
             <div className="flex items-center justify-between h-18 md:h-20">
               <Link href="/" className="flex items-center h-full">
-                <div className="relative w-40 h-16 md:w-60 md:h-20">
+                <div className="relative w-48 h-20 md:w-72 md:h-24">
                   <Image
-                    src="/rotary-club-logo.jpeg"
+                    src={rotaryClubLogo}
                     alt="Rotary Club Visnagar Logo"
                     fill
                     className="object-contain object-left"
                     priority
-                    sizes="(max-width: 768px) 160px, 240px"
+                    sizes="(max-width: 768px) 192px, 288px"
                   />
                 </div>
               </Link>
