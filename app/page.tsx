@@ -301,7 +301,7 @@ export default function Home() {
                 <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
                   <div className="flex items-center gap-3">
                     <PhoneCall className="w-4 h-4 text-[#EB5B00] flex-shrink-0" />
-                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Gajendrabhai Doshi</span>
+                    <span className="text-base font-semibold text-[#2B1341]">Rtn. Gajendra Doshi</span>
                   </div>
                   <a href="tel:+919328291321" className="text-base font-semibold text-[#640D5F] hover:text-[#D91656] transition-colors">9328291321</a>
                 </div>
@@ -341,7 +341,7 @@ export default function Home() {
               <MapPin className="w-5 h-5 text-[#EB5B00] flex-shrink-0" />
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-[#640D5F]/70 mb-0.5">Address</p>
-                <p className="text-base font-semibold text-[#2B1341] mb-0">Rotary Club of Visnagar<br />"Rotary Bhavan" Opp/ Nootan School<br />Visnagar – 384315</p>
+                <p className="text-base font-semibold text-[#2B1341] mb-0">Rotary Club of Visnagar<br />"Rotary Bhavan" Opp: Nootan School<br />Visnagar – 384315</p>
               </div>
             </div>
 
@@ -398,9 +398,29 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-4 bg-white border-t border-[#F8C8DC]">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto">
+                  <button 
+                    onClick={async () => {
+                      try {
+                        const response = await fetch('/Map.png')
+                        const blob = await response.blob()
+                        const url = window.URL.createObjectURL(blob)
+                        const link = document.createElement('a')
+                        link.href = url
+                        link.download = 'Marathon-Route-Map.png'
+                        document.body.appendChild(link)
+                        link.click()
+                        document.body.removeChild(link)
+                        window.URL.revokeObjectURL(url)
+                      } catch (error) {
+                        console.error('Error downloading map:', error)
+                        // Fallback: open in new tab
+                        window.open('/Map.png', '_blank')
+                      }
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto"
+                  >
                     <Download className="w-4 h-4" />
-                    Download PDF
+                    Download Map
                   </button>
                 </div>
               </div>

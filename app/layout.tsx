@@ -7,6 +7,11 @@ import LayoutWrapper from '@/components/LayoutWrapper'
 export const metadata: Metadata = {
   title: 'Marathon Event - Run for a Cause',
   description: 'Join us for an unforgettable marathon experience',
+  icons: {
+    icon: '/icon.jpeg',
+    shortcut: '/icon.jpeg',
+    apple: '/icon.jpeg',
+  },
 }
 
 export default function RootLayout({

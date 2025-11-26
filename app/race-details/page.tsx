@@ -109,6 +109,7 @@ export default function RaceDetailsPage() {
 
   const sections = [
     { id: 'Info', label: 'Info' },
+    { id: 'Announcement', label: 'Announcement' },
     { id: 'How_To_Apply', label: 'How to Apply' },
     { id: 'Eligibility_Criteria', label: 'Eligibility Criteria' },
     { id: 'Rules_Regulations', label: 'Rules and Regulations' },
@@ -158,7 +159,7 @@ export default function RaceDetailsPage() {
       <section className="py-12 md:py-20 bg-white" id="RaceKmInfo" style={{ paddingTop: '80px' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
-            {/* Marathon Tabs */}
+            {/* Marathon Tabs with Announcement */}
             <div className="mb-8">
               <div className="flex flex-wrap gap-2 border-b-2 border-[#F8C8DC]">
                 {marathons.map((marathon, index) => (
@@ -169,7 +170,7 @@ export default function RaceDetailsPage() {
                       setActiveSection({ [index]: 'Info' })
                     }}
                     className={`px-6 py-3 font-semibold transition-colors ${
-                      activeTab === index
+                      activeTab === index && !isSectionActive(activeTab, 'Announcement')
                         ? 'bg-[#D91656] text-white border-b-4 border-[#D91656]'
                         : 'text-[#640D5F] hover:bg-[#FFF1F5]'
                     }`}
@@ -177,6 +178,20 @@ export default function RaceDetailsPage() {
                     {marathon.Name}
                   </button>
                 ))}
+                {currentMarathon && (
+                  <button
+                    onClick={() => {
+                      setActiveSection({ [activeTab]: 'Announcement' })
+                    }}
+                    className={`px-6 py-3 font-semibold transition-colors ${
+                      isSectionActive(activeTab, 'Announcement')
+                        ? 'bg-[#D91656] text-white border-b-4 border-[#D91656]'
+                        : 'text-[#640D5F] hover:bg-[#FFF1F5]'
+                    }`}
+                  >
+                    Announcement
+                  </button>
+                )}
               </div>
             </div>
 
@@ -231,15 +246,9 @@ export default function RaceDetailsPage() {
                               </span>
                             </li>
                             <li className="flex items-start gap-3">
-                              <Clock className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
-                              <span className="text-[#2B1341]">
-                                <strong>Run Start Time:</strong> {formatTime(currentMarathon.Run_Start_Time)}
-                              </span>
-                            </li>
-                            <li className="flex items-start gap-3">
                               <MapPin className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
                               <span className="text-[#2B1341]">
-                                <strong>Location:</strong> {currentMarathon.Location}
+                                <strong>Venue:</strong> {currentMarathon.Location}
                               </span>
                             </li>
                             <li className="flex items-start gap-3">
@@ -262,6 +271,86 @@ export default function RaceDetailsPage() {
                             />
                           </div>
                         )}
+                      </div>
+                    )}
+
+                    {/* Announcement Section */}
+                    {isSectionActive(activeTab, 'Announcement') && (
+                      <div className="space-y-6">
+                        <h3 className="text-3xl font-bold text-[#640D5F] mb-4">
+                          {currentMarathon.Name} ({currentMarathon.Track_Length})
+                        </h3>
+                        <div className="border-2 border-[#F8C8DC] rounded-lg p-6">
+                          <h4 className="text-xl font-bold text-[#640D5F] mb-4">
+                            Collect Your Running Number & T-shirt
+                          </h4>
+                          <ul className="space-y-3">
+                            <li className="flex items-start gap-3">
+                              <Calendar className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Date:</strong> ANNOUNCING SOON
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <Clock className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Time:</strong> ANNOUNCING SOON
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <MapPin className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
+                              <span className="text-[#2B1341]">
+                                <strong>Venue:</strong> ANNOUNCING SOON
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="mt-6">
+                          <p className="text-lg text-[#2B1341] mb-4">
+                            Participants have to show the Email OR SMS which has their BIB number. Alternatively please show registration information via SMS/email while collecting the BIB.
+                          </p>
+                          <p className="text-lg text-[#2B1341] mb-4">
+                            At the time of bib collection, participants are requested to carry original ID proof (ID Proof which has a Photo and Date of Birth)
+                          </p>
+                          <ul className="space-y-2 text-lg text-[#2B1341]">
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>No race category changes will be allowed.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>No t-shirt exchange will be allowed.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>Participants will not be allowed on the Race Day without BIB</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>No running number will be posted to individual mailing addresses for whatever reasons. Further, no number of bibs will be handed over to any participant post the declared closing hours of the Expo.</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="mt-6">
+                          <h5 className="text-xl font-bold text-[#640D5F] mb-3">Unavailable for the BIB Collection? Assign someone!</h5>
+                          <ul className="space-y-2 text-lg text-[#2B1341]">
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>Authorization Letter signed by the registered runner.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>He/She must carry a soft copy of the Registration Confirmation [With BIB Details] email / SMS.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <span className="text-[#EB5B00] mt-1">•</span>
+                              <span>Soft Copy of their ID Proof</span>
+                            </li>
+                          </ul>
+                          <p className="mt-4 text-lg font-semibold text-[#D91656]">
+                            Note: BIBs will not be distributed on race day.
+                          </p>
+                        </div>
                       </div>
                     )}
 
@@ -419,6 +508,33 @@ export default function RaceDetailsPage() {
                 className="object-contain"
                 sizes="90vw"
               />
+            </div>
+            <div className="p-4 bg-white border-t border-[#F8C8DC]">
+              <button 
+                onClick={async () => {
+                  try {
+                    const mapUrl = getRouteMapUrl(selectedMap)
+                    const response = await fetch(mapUrl)
+                    const blob = await response.blob()
+                    const url = window.URL.createObjectURL(blob)
+                    const link = document.createElement('a')
+                    link.href = url
+                    link.download = `${currentMarathon.Name.replace(/\s+/g, '-')}-Route-Map.png`
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+                    window.URL.revokeObjectURL(url)
+                  } catch (error) {
+                    console.error('Error downloading map:', error)
+                    // Fallback: open in new tab
+                    window.open(getRouteMapUrl(selectedMap), '_blank')
+                  }
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto"
+              >
+                <Download className="w-4 h-4" />
+                Download Map
+              </button>
             </div>
           </motion.div>
         </div>
