@@ -282,73 +282,57 @@ export default function RaceDetailsPage() {
                         </h3>
                         <div className="border-2 border-[#F8C8DC] rounded-lg p-6">
                           <h4 className="text-xl font-bold text-[#640D5F] mb-4">
-                            Collect Your Running Number & T-shirt
+                            COLLECT YOUR RUNNING NUMBER & T-SHIRT
                           </h4>
                           <ul className="space-y-3">
                             <li className="flex items-start gap-3">
                               <Calendar className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
                               <span className="text-[#2B1341]">
-                                <strong>Date:</strong> ANNOUNCING SOON
+                                <strong>Date:</strong> 25/12/2025 and 26/12/2025
                               </span>
                             </li>
                             <li className="flex items-start gap-3">
                               <Clock className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
                               <span className="text-[#2B1341]">
-                                <strong>Time:</strong> ANNOUNCING SOON
+                                <strong>Time:</strong> 9:00 AM to 1:00 PM and 3:00 PM to 6:00 PM
                               </span>
                             </li>
                             <li className="flex items-start gap-3">
                               <MapPin className="w-5 h-5 text-[#EB5B00] mt-1 flex-shrink-0" />
                               <span className="text-[#2B1341]">
-                                <strong>Venue:</strong> ANNOUNCING SOON
+                                <strong>Venue:</strong> Rotary Club of Visnagar Rotary Bhavan, Opp. Nootan School, Visnagar – 384315
                               </span>
                             </li>
                           </ul>
                         </div>
                         <div className="mt-6">
-                          <p className="text-lg text-[#2B1341] mb-4">
-                            Participants have to show the Email OR SMS which has their BIB number. Alternatively please show registration information via SMS/email while collecting the BIB.
-                          </p>
-                          <p className="text-lg text-[#2B1341] mb-4">
-                            At the time of bib collection, participants are requested to carry original ID proof (ID Proof which has a Photo and Date of Birth)
-                          </p>
+                          <h5 className="text-xl font-bold text-[#640D5F] mb-3">Important Instructions</h5>
                           <ul className="space-y-2 text-lg text-[#2B1341]">
                             <li className="flex items-start gap-3">
                               <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>No race category changes will be allowed.</span>
+                              <span>Participants must show the Email or WhatsApp message containing their BIB / Confirmation Number at the time of collection.</span>
                             </li>
                             <li className="flex items-start gap-3">
                               <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>No t-shirt exchange will be allowed.</span>
+                              <span>Participants are requested to carry a valid original ID proof (with Photo and Date of Birth) for T-shirt and BIB collection.</span>
                             </li>
                             <li className="flex items-start gap-3">
                               <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>Participants will not be allowed on the Race Day without BIB</span>
+                              <span>No T-shirt exchange will be allowed.</span>
                             </li>
                             <li className="flex items-start gap-3">
                               <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>No running number will be posted to individual mailing addresses for whatever reasons. Further, no number of bibs will be handed over to any participant post the declared closing hours of the Expo.</span>
+                              <span>Participants will not be allowed on Race Day without their T-shirt and BIB.</span>
                             </li>
                           </ul>
                         </div>
                         <div className="mt-6">
-                          <h5 className="text-xl font-bold text-[#640D5F] mb-3">Unavailable for the BIB Collection? Assign someone!</h5>
-                          <ul className="space-y-2 text-lg text-[#2B1341]">
-                            <li className="flex items-start gap-3">
-                              <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>Authorization Letter signed by the registered runner.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>He/She must carry a soft copy of the Registration Confirmation [With BIB Details] email / SMS.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-[#EB5B00] mt-1">•</span>
-                              <span>Soft Copy of their ID Proof</span>
-                            </li>
-                          </ul>
-                          <p className="mt-4 text-lg font-semibold text-[#D91656]">
-                            Note: BIBs will not be distributed on race day.
+                          <h5 className="text-xl font-bold text-[#640D5F] mb-3">Unable to collect your BIB?</h5>
+                          <p className="text-lg text-[#2B1341] mb-3">
+                            You may authorize someone to collect it on your behalf.
+                          </p>
+                          <p className="text-lg text-[#2B1341] mb-3">
+                            Please provide an Authorization Letter signed by the registered runner.
                           </p>
                         </div>
                       </div>
