@@ -28,7 +28,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] relative overflow-hidden pt-20 md:pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] relative overflow-hidden pt-28 md:pt-24">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               Register for the Run
             </h1>
             <p className="text-[#2B1341]/80 text-sm">
-              Join the official 5 KM Cervical Cancer Awareness Run.
+              Join the Visnagar Marathon 2025, 5 KM Cervical Cancer Awareness Run.
             </p>
           </div>
 
@@ -110,7 +110,7 @@ export default function RegisterPage() {
               </motion.div>
             </div>
             <p className="text-[#2B1341]/80 text-lg">
-              Join the official 5 KM Cervical Cancer Awareness Run.
+              Join the Visnagar Marathon 2025, 5 KM Cervical Cancer Awareness Run.
             </p>
             <div className="flex items-center justify-center gap-2 mt-3">
               <div className="w-2 h-2 bg-[#D91656] rounded-full"></div>

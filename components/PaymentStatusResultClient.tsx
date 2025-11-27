@@ -102,7 +102,7 @@ const PaymentStatusResultClient: React.FC<PaymentStatusResultClientProps> = ({
               <span className="text-text-secondary">₹{payment.Amount}</span>
             </div>
             <p className="text-xs text-text-secondary">
-              Marathon:{' '}
+              
               <span className="text-text-primary font-medium">
                 {payment.Participant?.Marathon?.Name || 'N/A'}
               </span>
