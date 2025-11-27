@@ -260,7 +260,10 @@ export default function RaceDetailsPage() {
                           </ul>
                         </div>
                         <div className="mt-6">
-                          <p className="text-lg text-[#2B1341] mb-4">{currentMarathon.Description}</p>
+                          <div
+                            className="text-[#2B1341]/80 prose prose-ul:list-disc prose-li:ml-6 max-w-none"
+                            dangerouslySetInnerHTML={{ __html: currentMarathon.Runner_Amenities }}
+                          />
                         </div>
                         {currentMarathon.Terms_Conditions && (
                           <div className="mt-6">

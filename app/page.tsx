@@ -248,7 +248,7 @@ export default function Home() {
       <section id="route" className="py-14 md:py-20 bg-[#FFF7EB]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
           <motion.div
-            className="flex-1 space-y-4"
+            className="flex-[1.2] space-y-4"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -257,32 +257,36 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-[#640D5F] mb-4">Route Map</h2>
             <p className="text-[#2B1341]/80 max-w-xl">
               Check the official marathon route, hydration points, aid stations, and important road
-              details.
+              details on our interactive map.
             </p>
             <button
               onClick={() => setIsMapModalOpen(true)}
               className="px-6 py-3 bg-[#D91656] text-white font-semibold rounded-full shadow-lg hover:-translate-y-1 transition"
             >
-              View Full Route
+              View Interactive Map
             </button>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex-1 w-full"
-          >
-            <div className="h-64 md:h-72 rounded-3xl bg-gradient-to-br from-[#FFB200] via-[#EB5B00] to-[#D91656] relative overflow-hidden shadow-xl">
-              <div className="absolute inset-4 rounded-2xl border-2 border-white/70 overflow-hidden shadow-inner">
-                <Image
-                  src="/Map.png"
-                  alt="Marathon Route Map"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex-[0.8] w-full"
+            >
+             <div className="h-80 md:h-96 rounded-3xl bg-gradient-to-br from-[#FFB200] via-[#EB5B00] to-[#D91656] relative overflow-hidden shadow-xl">
+                <div className="absolute inset-4 rounded-2xl border-2 border-white/70 overflow-hidden shadow-inner">
+                 <iframe
+                   src="https://www.google.com/maps/d/u/0/embed?mid=1WtTX4-fWL7XT7vsZb5rBLotmW8A08XQ&ehbc=2E312F&ll=23.691997959732245%2C72.54465300000003&z=14"
+                    width="130%"
+                    height="150%"
+                    style={{ border: 0, marginTop: '-80px', marginBottom: '-50px', marginLeft: '-50px' }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Marathon Route Map"
+                    className="rounded-xl"
+                  />
+                </div>
             </div>
           </motion.div>
         </div>
@@ -389,38 +393,27 @@ export default function Home() {
                   <X className="w-6 h-6 text-[#640D5F]" />
                 </button>
                 <div className="relative w-full h-[80vh]">
-                  <Image
-                    src="/Map.png"
-                    alt="Full Marathon Route Map"
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, 90vw"
+                  <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1WtTX4-fWL7XT7vsZb5rBLotmW8A08XQ&ehbc=2E312F&ll=23.691997959732245%2C72.54465300000003&z=15"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Full Marathon Route Map"
+                    className="rounded-xl"
                   />
                 </div>
                 <div className="p-4 bg-white border-t border-[#F8C8DC]">
                   <button 
-                    onClick={async () => {
-                      try {
-                        const response = await fetch('/assets/images/Images/Map.png')
-                        const blob = await response.blob()
-                        const url = window.URL.createObjectURL(blob)
-                        const link = document.createElement('a')
-                        link.href = url
-                        link.download = 'Marathon-Route-Map.png'
-                        document.body.appendChild(link)
-                        link.click()
-                        document.body.removeChild(link)
-                        window.URL.revokeObjectURL(url)
-                      } catch (error) {
-                        console.error('Error downloading map:', error)
-                        // Fallback: open in new tab
-                        window.open('/assets/images/Images/Map.png', '_blank')
-                      }
+                    onClick={() => {
+                      window.open('https://www.google.com/maps/d/u/0/viewer?mid=1WtTX4-fWL7XT7vsZb5rBLotmW8A08XQ&ll=23.691997959732245%2C72.54465300000003&z=17', '_blank')
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto"
                   >
-                    <Download className="w-4 h-4" />
-                    Download Map
+                    <Map className="w-4 h-4" />
+                    Open in Google Maps
                   </button>
                 </div>
               </div>
