@@ -5,7 +5,7 @@ import { CartProvider } from '@/context/CartContext'
 import LayoutWrapper from '@/components/LayoutWrapper'
 
 export const metadata: Metadata = {
-  title: 'Marathon Event - Run for a Cause',
+  title: 'Visnagar Marathon 2025 - Run for Cervical Cancer',
   description: 'Join us for an unforgettable marathon experience',
   icons: {
     icon: '/icon.jpeg',

@@ -83,10 +83,17 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
           </div>
         </div>
 
-        {/* Full width description for mobile */}
-        <p className="text-sm text-[#2B1341]/80 leading-relaxed bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200] w-full">
-          {ticket.description}
-        </p>
+        {/* Full width runner amenities for mobile */}
+        {ticket.runnerAmenities ? (
+          <div
+            className="text-sm text-[#2B1341]/80 leading-relaxed bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200] w-full prose prose-sm prose-ul:list-disc prose-li:ml-4 prose-ol:list-decimal max-w-none"
+            dangerouslySetInnerHTML={{ __html: ticket.runnerAmenities }}
+          />
+        ) : (
+          <p className="text-sm text-[#2B1341]/80 leading-relaxed bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200] w-full">
+            {ticket.description}
+          </p>
+        )}
       </div>
 
       {/* Desktop Layout */}
@@ -125,9 +132,16 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAdd, onRemove }) => {
             )}
           </div>
 
-          <p className="text-sm text-[#2B1341]/80 leading-relaxed w-10/12 bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200]">
-            {ticket.description}
-          </p>
+          {ticket.runnerAmenities ? (
+            <div
+              className="text-sm text-[#2B1341]/80 leading-relaxed w-10/12 bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200] prose prose-sm prose-ul:list-disc prose-li:ml-4 prose-ol:list-decimal max-w-none"
+              dangerouslySetInnerHTML={{ __html: ticket.runnerAmenities }}
+            />
+          ) : (
+            <p className="text-sm text-[#2B1341]/80 leading-relaxed w-10/12 bg-[#FFF7EB]/50 p-3 rounded-lg border-l-4 border-[#FFB200]">
+              {ticket.description}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col items-center gap-2 flex-shrink-0">

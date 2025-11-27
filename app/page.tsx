@@ -401,7 +401,7 @@ export default function Home() {
                   <button 
                     onClick={async () => {
                       try {
-                        const response = await fetch('/Map.png')
+                        const response = await fetch('/assets/images/Images/Map.png')
                         const blob = await response.blob()
                         const url = window.URL.createObjectURL(blob)
                         const link = document.createElement('a')
@@ -414,7 +414,7 @@ export default function Home() {
                       } catch (error) {
                         console.error('Error downloading map:', error)
                         // Fallback: open in new tab
-                        window.open('/Map.png', '_blank')
+                        window.open('/assets/images/Images/Map.png', '_blank')
                       }
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto"

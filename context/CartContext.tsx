@@ -83,6 +83,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             discountedPrice: Number(item.Fees_Amount) || 0,
             discount: 0,
             description: item.Description ?? '',
+            runnerAmenities: item.Runner_Amenities ?? '',
             quantity: 1,
           }))
           setTickets(apiTickets)

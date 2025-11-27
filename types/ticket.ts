@@ -6,6 +6,7 @@ export interface Ticket {
   discountedPrice: number
   discount: number
   description: string
+  runnerAmenities?: string
   quantity: number
 }
 
