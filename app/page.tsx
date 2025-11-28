@@ -151,9 +151,10 @@ export default function Home() {
               >
                 <Link
                   href="/register"
-                  className="px-8 py-4 bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white font-bold rounded-full shadow-lg shadow-[#D91656]/50 transition hover:-translate-y-1 hover:shadow-xl"
+                  className="bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white rounded-full hover:from-[#EB5B00] hover:to-[#D91656] hover:scale-105 active:scale-95 transition-all duration-300 font-bold whitespace-nowrap px-10 py-4 text-lg shadow-lg hover:shadow-xl tracking-wide relative overflow-hidden group animate-pulse-glow animate-button-shine hover:-translate-y-1"
                 >
-                  Register Now
+                  <span className="relative z-10">Register Now</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/race-details"

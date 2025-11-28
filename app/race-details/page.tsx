@@ -460,9 +460,10 @@ export default function RaceDetailsPage() {
             </p>
             <Link
               href="/register"
-              className="inline-block px-12 py-4 bg-white text-[#640D5F] font-bold rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-200"
+              className="inline-block px-12 py-4 bg-gradient-to-r from-[#FFB200] to-[#EB5B00] text-white font-bold rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 tracking-wide relative overflow-hidden group animate-pulse-glow animate-button-shine hover:from-[#EB5B00] hover:to-[#D91656]"
             >
-              Register Now
+              <span className="relative z-10">Register Now</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </Link>
           </motion.div>
         </div>
