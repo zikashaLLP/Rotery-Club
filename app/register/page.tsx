@@ -19,7 +19,7 @@ export default function RegisterPage() {
   } = useCart()
 
   // Temporary flag to control registration availability
-  const REGISTRATION_OPEN = false
+  const REGISTRATION_OPEN = true
 
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
