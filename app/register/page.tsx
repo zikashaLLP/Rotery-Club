@@ -18,6 +18,9 @@ export default function RegisterPage() {
     removeTicket,
   } = useCart()
 
+  // Temporary flag to control registration availability
+  const REGISTRATION_OPEN = false
+
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
       alert('Please select at least one registration receipt')
@@ -120,90 +123,111 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        <div className="md:flex md:gap-6 lg:gap-8">
-          {/* Left Section - Registration Receipts */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+        {!REGISTRATION_OPEN ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:w-[62%] lg:w-[60%] mb-6 md:mb-0"
+            className="max-w-2xl mx-auto mt-8 md:mt-12 text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-[#F8C8DC] px-6 py-10 md:px-10 md:py-14"
           >
-            <div className="bg-white rounded-none md:rounded-3xl shadow-xl border-0 md:border-2 border-[#F8C8DC] overflow-hidden hover:shadow-2xl transition-all duration-300">
-              {tickets.map((ticket, index) => (
-                <motion.div 
-                  key={ticket.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className={index !== tickets.length - 1 ? 'border-b border-[#F8C8DC]' : ''}
-                >
-                  <TicketCard
-                    ticket={ticket}
-                    onAdd={addTicket}
-                    onRemove={removeTicket}
-                  />
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Mobile spacing for sticky bar */}
-            <div className="h-20 md:hidden"></div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-4">
+              Registrations Opening Soon
+            </h2>
+            <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
+              Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> will start soon.
+            </p>
+            <p className="text-[#2B1341]/70 text-sm md:text-base">
+              Please check back here shortly for updates, or follow Rotary Club of Visnagar on social media for the latest announcements.
+            </p>
           </motion.div>
-
-          {/* Right Section - Summary (Desktop Only) */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="hidden md:block md:w-[35%] lg:w-[30%]"
-          >
-            <div className="bg-white rounded-3xl shadow-xl border-2 border-[#F8C8DC] overflow-hidden sticky top-24 hover:shadow-2xl transition-all duration-300">
-              <TicketSummaryCard
-                selectedTickets={selectedTickets}
-                totalAmount={totalAmount}
-                onCheckout={handleCheckout}
-              />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Mobile Sticky Checkout Bar - One Line */}
-        <AnimatePresence>
-          {selectedTickets.length > 0 && (
-            <motion.div
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 100, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#F8C8DC] shadow-2xl z-50 md:hidden"
-            >
-              <div className="flex items-center justify-between px-4 py-4">
-                {/* Left: Amount */}
-                <div className="flex items-center gap-3">
-                  <span className="text-lg font-bold text-[#640D5F]">₹{totalAmount}</span>
-                  <div className="w-px h-6 bg-[#F8C8DC]"></div>
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4 text-[#640D5F]" />
-                    <span className="text-sm font-medium text-[#2B1341]/80">
-                      {selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0)}
-                    </span>
-                  </div>
+        ) : (
+          <>
+            <div className="md:flex md:gap-6 lg:gap-8">
+              {/* Left Section - Registration Receipts */}
+              <motion.div 
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="md:w-[62%] lg:w-[60%] mb-6 md:mb-0"
+              >
+                <div className="bg-white rounded-none md:rounded-3xl shadow-xl border-0 md:border-2 border-[#F8C8DC] overflow-hidden hover:shadow-2xl transition-all duration-300">
+                  {tickets.map((ticket, index) => (
+                    <motion.div 
+                      key={ticket.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      className={index !== tickets.length - 1 ? 'border-b border-[#F8C8DC]' : ''}
+                    >
+                      <TicketCard
+                        ticket={ticket}
+                        onAdd={addTicket}
+                        onRemove={removeTicket}
+                      />
+                    </motion.div>
+                  ))}
                 </div>
                 
-                {/* Right: Proceed Button */}
-                <button
-                  onClick={handleCheckout}
-                  className="bg-[#D91656] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#EB5B00] transition-colors shadow-md flex items-center gap-2"
+                {/* Mobile spacing for sticky bar */}
+                <div className="h-20 md:hidden"></div>
+              </motion.div>
+              
+              {/* Right Section - Summary (Desktop Only) */}
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="hidden md:block md:w-[35%] lg:w-[30%]"
+              >
+                <div className="bg-white rounded-3xl shadow-xl border-2 border-[#F8C8DC] overflow-hidden sticky top-24 hover:shadow-2xl transition-all duration-300">
+                  <TicketSummaryCard
+                    selectedTickets={selectedTickets}
+                    totalAmount={totalAmount}
+                    onCheckout={handleCheckout}
+                  />
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Mobile Sticky Checkout Bar - One Line */}
+            <AnimatePresence>
+              {selectedTickets.length > 0 && (
+                <motion.div
+                  initial={{ y: 100, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 100, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#F8C8DC] shadow-2xl z-50 md:hidden"
                 >
-                  Proceed
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <div className="flex items-center justify-between px-4 py-4">
+                    {/* Left: Amount */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg font-bold text-[#640D5F]">₹{totalAmount}</span>
+                      <div className="w-px h-6 bg-[#F8C8DC]"></div>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4 text-[#640D5F]" />
+                        <span className="text-sm font-medium text-[#2B1341]/80">
+                          {selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0)}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Right: Proceed Button */}
+                    <button
+                      onClick={handleCheckout}
+                      className="bg-[#D91656] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#EB5B00] transition-colors shadow-md flex items-center gap-2"
+                    >
+                      Proceed
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
       </div>
     </div>
   )
