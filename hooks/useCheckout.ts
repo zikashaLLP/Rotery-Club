@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { ParticipantDetails, CheckoutFormErrors } from '@/types/participant'
 import { Ticket } from '@/types/ticket'
 import { API_BASE_URL } from '@/lib/config'
+import { safeRedirect } from '@/lib/utils'
 
 export const useCheckout = (selectedTickets: Ticket[]) => {
   // Initialize participant forms for each ticket quantity
@@ -252,7 +253,8 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
       const paymentUrl = paymentResult?.data?.paymentUrl
 
       if (paymentUrl) {
-        window.location.href = paymentUrl
+        // Use cross-platform compatible redirect function
+        safeRedirect(paymentUrl)
       }
 
       return true

@@ -11,7 +11,10 @@ const PaymentStatusContent = () => {
 
   useEffect(() => {
     if (!merchantOrderId) {
-      router.replace('/')
+      // Add a small delay before redirecting to home to avoid iOS redirect issues
+      setTimeout(() => {
+        router.replace('/')
+      }, 100)
       return
     }
 
@@ -19,7 +22,10 @@ const PaymentStatusContent = () => {
       sessionStorage.setItem('latestMerchantOrderId', merchantOrderId)
     }
 
-    router.replace('/payment/status/result')
+    // Add a small delay before redirecting to result page for better iOS compatibility
+    setTimeout(() => {
+      router.replace('/payment/status/result')
+    }, 100)
   }, [merchantOrderId, router])
 
   return null

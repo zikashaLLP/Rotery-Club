@@ -111,8 +111,12 @@ export default function CheckoutPage() {
     // All valid, proceed with submission
     const success = await submitCheckout()
     if (success) {
-      // Navigate to payment instead of showing alert
-      router.push('/payment/status')
+      // Add a small delay to ensure the payment redirect has time to process
+      // If redirect fails, fallback to payment status page
+      setTimeout(() => {
+        // This will only execute if the payment redirect failed
+        router.push('/payment/status')
+      }, 5000)
     }
   }
 

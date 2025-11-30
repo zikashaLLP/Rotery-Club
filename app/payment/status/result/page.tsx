@@ -13,7 +13,10 @@ export default function PaymentStatusResultPage() {
 
     const storedOrderId = sessionStorage.getItem('latestMerchantOrderId')
     if (!storedOrderId) {
-      router.replace('/')
+      // Add a small delay before redirecting to home to avoid iOS redirect issues
+      setTimeout(() => {
+        router.replace('/')
+      }, 100)
       return
     }
 
