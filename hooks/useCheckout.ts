@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import { ParticipantDetails, CheckoutFormErrors } from '@/types/participant'
 import { Ticket } from '@/types/ticket'
 import { API_BASE_URL } from '@/lib/config'
-import { safeRedirect } from '@/lib/utils'
 
 export const useCheckout = (selectedTickets: Ticket[]) => {
   // Initialize participant forms for each ticket quantity
@@ -124,7 +123,7 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
     }
   }, [currentParticipantIndex])
 
-  const submitCheckout = useCallback(async () => {
+  const submitCheckout = useCallback(async (): Promise<{ success: boolean; paymentUrl?: string; error?: string }> => {
     // Validate all participants
     let allValid = true
     for (let i = 0; i < participants.length; i++) {
@@ -138,7 +137,7 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
     }
 
     if (!allValid) {
-      return false
+      return { success: false, error: 'Please fix the validation errors' }
     }
 
     setIsSubmitting(true)
@@ -252,15 +251,36 @@ export const useCheckout = (selectedTickets: Ticket[]) => {
       const paymentResult = await paymentResponse.json()
       const paymentUrl = paymentResult?.data?.paymentUrl
 
+      // Debug logging to check what we're getting from the server
+      console.log('Payment response:', paymentResult)
+      console.log('Payment URL received:', paymentUrl)
+      console.log('Payment URL length:', paymentUrl?.length)
+
       if (paymentUrl) {
-        // Use cross-platform compatible redirect function
-        safeRedirect(paymentUrl)
+        // Validate URL before returning
+        try {
+          const urlObj = new URL(paymentUrl)
+          console.log('URL validation successful:', {
+            origin: urlObj.origin,
+            pathname: urlObj.pathname,
+            searchParamsLength: urlObj.searchParams.toString().length,
+            hash: urlObj.hash
+          })
+          console.log('Complete validated URL:', paymentUrl)
+        } catch (urlError) {
+          console.error('Invalid payment URL received:', paymentUrl, urlError)
+          throw new Error('Invalid payment URL received from server')
+        }
+
+        // Return success with payment URL for user-initiated redirect
+        return { success: true, paymentUrl }
+      } else {
+        return { success: true }
       }
 
-      return true
     } catch (error) {
       console.error('Checkout error:', error)
-      return false
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
     } finally {
       setIsSubmitting(false)
     }

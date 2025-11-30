@@ -11,7 +11,22 @@ import { cn } from '@/lib/utils'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { selectedTickets, totalAmount } = useCart()
+  const { selectedTickets: originalSelectedTickets, totalAmount: originalTotalAmount } = useCart()
+  
+  // For testing: Add a default ticket if no tickets are selected
+  const testTicket = {
+    id: '1',
+    name: 'Test Marathon - 10 KM Run',
+    distance: '10 KM',
+    originalPrice: 1200,
+    discountedPrice: 900,
+    discount: 25,
+    description: 'Test registration for payment flow testing',
+    quantity: 1,
+  }
+  
+  const selectedTickets = originalSelectedTickets.length === 0 ? [testTicket] : originalSelectedTickets
+  const totalAmount = originalSelectedTickets.length === 0 ? testTicket.discountedPrice : originalTotalAmount
 
   const {
     currentParticipant,
@@ -30,13 +45,17 @@ export default function CheckoutPage() {
 
   const [expandedParticipant, setExpandedParticipant] = useState<number>(0)
   const [filledParticipants, setFilledParticipants] = useState<Set<number>>(new Set())
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null)
+  const [showPaymentButton, setShowPaymentButton] = useState(false)
 
-  // Redirect if no tickets selected
+  // Redirect if no tickets selected (disabled for testing since we add a test ticket)
   useEffect(() => {
-    if (selectedTickets.length === 0) {
-      router.push('/register')
+    
+    if (originalSelectedTickets.length === 0) {
+      // For testing: Don't redirect, we'll use the test ticket
+      console.log('No tickets selected, using test ticket for payment flow testing')
     }
-  }, [selectedTickets, router])
+  }, [originalSelectedTickets, router])
 
   // Check if a participant form is complete
   const isParticipantComplete = (participant: any) => {
@@ -109,14 +128,39 @@ export default function CheckoutPage() {
     }
 
     // All valid, proceed with submission
-    const success = await submitCheckout()
-    if (success) {
-      // Add a small delay to ensure the payment redirect has time to process
-      // If redirect fails, fallback to payment status page
-      setTimeout(() => {
-        // This will only execute if the payment redirect failed
+    const result = await submitCheckout()
+    if (result && typeof result === 'object' && result.success) {
+      if (result.paymentUrl) {
+        // Store payment URL and show payment button for user-initiated redirect
+        setPaymentUrl(result.paymentUrl)
+        setShowPaymentButton(true)
+      } else {
+        // Fallback to payment status page if no payment URL
         router.push('/payment/status')
-      }, 5000)
+      }
+    }
+  }
+
+  const handlePaymentRedirect = () => {
+    if (paymentUrl) {
+      console.log('Redirecting to payment URL:', paymentUrl)
+      console.log('URL length:', paymentUrl.length)
+      
+      // Direct redirect within user click event - works reliably on iOS
+      try {
+        window.location.href = paymentUrl
+      } catch (error) {
+        console.error('Redirect failed:', error)
+        // Fallback: try window.location.assign
+        try {
+          window.location.assign(paymentUrl)
+        } catch (fallbackError) {
+          console.error('Fallback redirect also failed:', fallbackError)
+          alert('Unable to redirect to payment. Please try again.')
+        }
+      }
+    } else {
+      console.error('No payment URL available for redirect')
     }
   }
 
@@ -132,9 +176,10 @@ export default function CheckoutPage() {
     }
   }
 
-  if (selectedTickets.length === 0) {
-    return null
-  }
+  // For testing: Always render since we provide a test ticket when none are selected
+  // if (selectedTickets.length === 0) {
+  //   return null
+  // }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
@@ -272,6 +317,47 @@ export default function CheckoutPage() {
               )
             })}
           </div>
+
+          {/* Payment Button Overlay */}
+          {showPaymentButton && paymentUrl && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full text-center">
+                <div className="mb-4">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-text-primary mb-2">
+                    Registration Successful!
+                  </h3>
+                  <p className="text-text-secondary text-sm mb-6">
+                    Your participant details have been saved. Click the button below to proceed to payment.
+                  </p>
+                </div>
+                
+                <Button
+                  onClick={handlePaymentRedirect}
+                  variant="primary"
+                  className="w-full mb-4 text-lg py-3"
+                >
+                  Proceed to Payment
+                </Button>
+                
+                <div className="text-center">
+                  <button
+                    onClick={() => {
+                      setShowPaymentButton(false)
+                      router.push('/payment/status')
+                    }}
+                    className="text-text-secondary text-sm hover:text-text-primary transition-colors underline"
+                  >
+                    Skip and go to payment status
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Right Section - Sticky Summary */}
           <div className="section-right self-start sticky top-8">
