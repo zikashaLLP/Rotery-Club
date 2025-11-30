@@ -11,22 +11,7 @@ import { cn } from '@/lib/utils'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { selectedTickets: originalSelectedTickets, totalAmount: originalTotalAmount } = useCart()
-  
-  // For testing: Add a default ticket if no tickets are selected
-  const testTicket = {
-    id: '1',
-    name: 'Test Marathon - 10 KM Run',
-    distance: '10 KM',
-    originalPrice: 1200,
-    discountedPrice: 900,
-    discount: 25,
-    description: 'Test registration for payment flow testing',
-    quantity: 1,
-  }
-  
-  const selectedTickets = originalSelectedTickets.length === 0 ? [testTicket] : originalSelectedTickets
-  const totalAmount = originalSelectedTickets.length === 0 ? testTicket.discountedPrice : originalTotalAmount
+  const { selectedTickets, totalAmount } = useCart()
 
   const {
     currentParticipant,
@@ -48,14 +33,12 @@ export default function CheckoutPage() {
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null)
   const [showPaymentButton, setShowPaymentButton] = useState(false)
 
-  // Redirect if no tickets selected (disabled for testing since we add a test ticket)
+  // Redirect if no tickets selected
   useEffect(() => {
-    
-    if (originalSelectedTickets.length === 0) {
-      // For testing: Don't redirect, we'll use the test ticket
-      console.log('No tickets selected, using test ticket for payment flow testing')
+    if (selectedTickets.length === 0) {
+      router.push('/register')
     }
-  }, [originalSelectedTickets, router])
+  }, [selectedTickets, router])
 
   // Check if a participant form is complete
   const isParticipantComplete = (participant: any) => {
@@ -176,10 +159,9 @@ export default function CheckoutPage() {
     }
   }
 
-  // For testing: Always render since we provide a test ticket when none are selected
-  // if (selectedTickets.length === 0) {
-  //   return null
-  // }
+  if (selectedTickets.length === 0) {
+    return null
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
@@ -343,18 +325,6 @@ export default function CheckoutPage() {
                 >
                   Proceed to Payment
                 </Button>
-                
-                <div className="text-center">
-                  <button
-                    onClick={() => {
-                      setShowPaymentButton(false)
-                      router.push('/payment/status')
-                    }}
-                    className="text-text-secondary text-sm hover:text-text-primary transition-colors underline"
-                  >
-                    Skip and go to payment status
-                  </button>
-                </div>
               </div>
             </div>
           )}
