@@ -277,7 +277,7 @@ export default function Home() {
              <div className="h-80 md:h-96 rounded-3xl bg-gradient-to-br from-[#FFB200] via-[#EB5B00] to-[#D91656] relative overflow-hidden shadow-xl">
                 <div className="absolute inset-4 rounded-2xl border-2 border-white/70 overflow-hidden shadow-inner">
                  <iframe
-                   src="https://www.google.com/maps/d/u/0/embed?mid=1aoktNSX-GLJTsMj4QeAcelYw88LLrvg&ll=23.690552363278883%2C72.54499999999999&z=15"
+                   src="https://www.google.com/maps/d/u/0/embed?mid=1aoktNSX-GLJTsMj4QeAcelYw88LLrvg&ll=23.690552363278883%2C72.54499999999999&z=14"
                     width="130%"
                     height="150%"
                     style={{ border: 0, marginTop: '-80px', marginBottom: '-50px', marginLeft: '-50px' }}
@@ -409,7 +409,7 @@ export default function Home() {
                 <div className="p-4 bg-white border-t border-[#F8C8DC]">
                   <button 
                     onClick={() => {
-                      window.open('https://www.google.com/maps/d/u/0/viewer?mid=1aoktNSX-GLJTsMj4QeAcelYw88LLrvg&ll=23.690552363278883%2C72.54499999999999&z=15', '_blank')
+                      window.open('https://www.google.com/maps/d/u/0/viewer?mid=1aoktNSX-GLJTsMj4QeAcelYw88LLrvg&ll=23.690552363278883%2C72.54499999999999&z=17', '_blank')
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-[#640D5F] text-white rounded-lg hover:bg-[#D91656] transition mx-auto"
                   >
