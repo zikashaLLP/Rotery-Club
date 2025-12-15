@@ -96,7 +96,7 @@ const PosterAwarenessSection = () => {
               >
                 <div className="relative aspect-[3/4] w-full max-w-md mx-auto overflow-hidden rounded-2xl">
                   <Image
-                    src="/poster.jpeg"
+                    src="/New_Banner.jpeg"
                     alt="Cervical Cancer Awareness Marathon Poster"
                     fill
                     className="object-cover"
