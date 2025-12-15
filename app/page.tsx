@@ -142,12 +142,55 @@ export default function Home() {
                 ))}
               </motion.div>
 
+              {/* Last Registration Date Notice - Urgent */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: [1, 1.05, 1],
+                  y: [0, -5, 0]
+                }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 0.5,
+                  scale: {
+                    repeat: Infinity,
+                    duration: 1.5,
+                    ease: "easeInOut"
+                  },
+                  y: {
+                    repeat: Infinity,
+                    duration: 1.5,
+                    ease: "easeInOut"
+                  }
+                }}
+                className="relative inline-flex items-center gap-3 bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-8 py-4 rounded-2xl shadow-2xl border-4 border-yellow-300 animate-pulse-fast"
+                style={{
+                  boxShadow: '0 0 30px rgba(217, 22, 86, 0.6), 0 0 60px rgba(255, 178, 0, 0.4)',
+                }}
+              >
+                <motion.div
+                  animate={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                >
+                  <Clock className="w-6 h-6 text-yellow-300" />
+                </motion.div>
+                
+                <div className="text-white">
+                  <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider">⚡ Hurry Up!</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold">Last Date: </span>
+                    <span className="text-2xl font-black text-yellow-300 tracking-wide">20/12/2025</span>
+                  </div>
+                </div>
+              </motion.div>
+
               {/* CTA Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-wrap gap-4 pt-4"
+                className="flex flex-wrap gap-4 pt-2"
               >
                 <Link
                   href="/register"
