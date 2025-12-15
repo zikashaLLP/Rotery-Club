@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Clock, MapPin, PhoneCall, Mail, Map, X, Download, Heart, Users, Activity } from 'lucide-react'
+import { Calendar, Clock, MapPin, PhoneCall, Mail, Map, X, Download, Heart, Users, Activity, Trophy, Award, Medal, Target } from 'lucide-react'
 import PosterAwarenessSection from '@/components/PosterAwarenessSection'
 
 const marathonDate = new Date('2025-12-28T05:00:00+05:30')
@@ -287,6 +287,255 @@ export default function Home() {
 
       {/* POSTER AWARENESS SECTION */}
       <PosterAwarenessSection />
+
+      {/* RACE GROUPS/CATEGORIES SECTION */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-[#640D5F] mb-4">
+              Race Categories
+            </h2>
+            <p className="text-lg text-[#2B1341]/80 max-w-2xl mx-auto">
+              Four groups competing for excellence
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Women's Category */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-6 border-2 border-[#D91656] shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 mx-auto border-2 border-[#D91656]">
+                <span className="text-3xl font-light text-[#D91656]">♀</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#640D5F] text-center mb-2">
+                Women's Category
+              </h3>
+              <p className="text-center text-[#2B1341] font-semibold text-lg">
+                All Ages
+              </p>
+            </motion.div>
+
+            {/* Men's Category 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border-2 border-[#640D5F] shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 mx-auto border-2 border-[#EB5B00]">
+                <span className="text-3xl font-light text-[#EB5B00]">♂</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#640D5F] text-center mb-2">
+                Men's Group 1
+              </h3>
+              <p className="text-center text-[#2B1341] font-semibold text-lg">
+                Till 30 Years
+              </p>
+            </motion.div>
+
+            {/* Men's Category 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 border-2 border-[#EB5B00] shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 mx-auto border-2 border-[#640D5F]">
+                <span className="text-3xl font-light text-[#640D5F]">♂</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#640D5F] text-center mb-2">
+                Men's Group 2
+              </h3>
+              <p className="text-center text-[#2B1341] font-semibold text-lg">
+                31 to 45 Years
+              </p>
+            </motion.div>
+
+            {/* Men's Category 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-[#FFB200] shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 mx-auto border-2 border-[#FFB200]">
+                <span className="text-3xl font-light text-[#FFB200]">♂</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#640D5F] text-center mb-2">
+                Men's Group 3
+              </h3>
+              <p className="text-center text-[#2B1341] font-semibold text-lg">
+                Above 46 Years
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Age Cut-off Note */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-8 text-center"
+          >
+            <div className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#FFB200]/20 to-[#EB5B00]/20 border-2 border-[#FFB200] px-6 py-4 rounded-xl">
+              <Calendar className="w-5 h-5 text-[#EB5B00] flex-shrink-0 self-center" />
+              <span className="text-[#2B1341] font-semibold">
+                <span className="text-[#640D5F] font-bold">Note:</span> Age cut-off will be counted from{' '}
+                <span className="text-[#D91656] font-bold">01/12/2025</span>
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Winners Prizes Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mt-12"
+          >
+            <div className="bg-gradient-to-br from-[#640D5F] to-[#D91656] rounded-3xl p-8 shadow-2xl border-4 border-[#FFB200]">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 mb-3">
+                  <Trophy className="w-8 h-8 text-yellow-300" />
+                  <h3 className="text-2xl md:text-3xl font-bold text-white">
+                    વિજેતાઓ માટે વિવિધ ગૃપ પ્રમાણે આકર્ષક ઈનામો
+                  </h3>
+                  <Trophy className="w-8 h-8 text-yellow-300" />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  { icon: '🏆', prize: 'આકર્ષક ટ્રોફી', detail: '(પ્રથમ, દ્રિતીય, તૃતીય)' },
+                  { icon: '🎁', prize: 'કભી-બી, વિસનગર તરફથી', detail: 'દરેક વિજેતાને ગીફ્ટ હેમ્પર' },
+                  { icon: '💪', prize: 'રોયલ જીમ તરફથી', detail: 'પ્રથમ ત્રણ વિજેતા બહેનો તથા ત્રણેય ગૃપના પ્રથમ ભાઈઓને ૧ વર્ષની ફ્રી મેમ્બરશીપ' },
+                  { icon: '💄', prize: 'આર્યમા બ્યુટીકેર તરફથી', detail: 'દરેક વિજેતાને ડીસ્કાઉન્ટ કુપન' },
+                  { icon: '🎉', prize: 'ઈનર સર્કલ તરફથી', detail: 'પ્રથમ ત્રણ વિજેતા બહેનોને રૂા.૫૦૦૦ સુધીના આકર્ષક પેકેજ' },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                    className="bg-white/95 backdrop-blur rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#FFB200] to-[#EB5B00] rounded-full flex items-center justify-center text-2xl shadow-md">
+                        {item.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-[#640D5F] text-base md:text-lg mb-1">
+                          {item.prize}
+                        </h4>
+                        <p className="text-[#2B1341] text-sm md:text-base">
+                          {item.detail}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* PRIZES AND DISCOUNTS SECTION */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-[#FFF7EB] to-[#FFF1F5]">
+        <div className="max-w-6xl mx-auto px-4">
+          {/* Main Heading - Lucky Draw */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="inline-block bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white px-8 py-6 rounded-3xl shadow-2xl border-4 border-yellow-300 mb-6"
+              style={{
+                boxShadow: '0 0 40px rgba(217, 22, 86, 0.5), 0 0 60px rgba(235, 91, 0, 0.4)',
+              }}
+            >
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <Trophy className="w-8 h-8 text-yellow-300" />
+                <h2 className="text-3xl md:text-4xl font-black text-yellow-300">લકી ડ્રો</h2>
+                <Trophy className="w-8 h-8 text-yellow-300" />
+              </div>
+              <p className="text-2xl md:text-3xl font-bold text-yellow-300">
+                રૂપિયા ૧ લાખના આકર્ષક ઈનામો
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Discount Coupons Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-xl border-2 border-[#FFB200]"
+          >
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <Award className="w-6 h-6 text-[#D91656]" />
+              <h3 className="text-2xl md:text-3xl font-bold text-[#640D5F] text-center">
+                ઉપરાંત વિસનગરના વિવિધ અગ્રણી સ્ટોર્સની ડિસ્કાઉન્ટ કુપન
+              </h3>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mt-8">
+              {[
+                { store: 'વંદન ડીસ્ટ્રીબ્યુટર તરફથી', offer: 'ORA Tooh Paste મળશે', discount: '🎁' },
+                { store: 'પ્રકાશ મોબાઈલ માંથી', offer: 'ખરીદી પર', discount: '૫% ડીસ્કાઉન્ટ' },
+                { store: 'Sankalp - The Food Café', offer: 'તરફથી', discount: '૧૦% ડીસ્કાઉન્ટ' },
+                { store: 'આર.કે.જવેલર્સ', offer: 'ઘડામણ પર', discount: '૩૦% ડીસ્કાઉન્ટ' },
+                { store: 'Fab Dubai', offer: 'લેડીઝ લોન્જરી પર', discount: '૧૦% ડીસ્કાઉન્ટ' },
+                { store: 'નવયુગ વસ્ત્રાલય', offer: 'માંથી ખરીદી પર', discount: '૧૦% ડીસ્કાઉન્ટ' },
+                { store: 'Hiltop Fashion', offer: 'માંથી ખરીદી પર', discount: '૧૦% ડીસ્કાઉન્ટ' },
+                { store: 'Canine Nutrition', offer: 'Dog Biscuitની ખરીદી પર', discount: '૧૦% ડીસ્કાઉન્ટ' },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.05 }}
+                  className="flex items-center gap-3 bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-xl border-2 border-[#F8C8DC] hover:border-[#D91656] transition-all hover:shadow-md"
+                >
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#D91656] to-[#640D5F] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {item.discount === '🎁' ? '🎁' : item.discount.match(/\d+/)?.[0] || '✓'}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-[#640D5F] text-sm md:text-base">{item.store}</p>
+                    <p className="text-[#2B1341] text-xs md:text-sm">
+                      {item.offer} <span className="font-bold text-[#D91656]">{item.discount}</span>
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* 4. ROUTE MAP TEASER */}
       <section id="route" className="py-14 md:py-20 bg-[#FFF7EB]">
