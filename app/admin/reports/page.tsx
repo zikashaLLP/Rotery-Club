@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
 import { useAuth } from '@/context/AuthContext'
 import { apiCall } from '@/lib/api'
-import { downloadExcel, downloadStatisticsExcel } from '@/lib/utils'
+import { downloadExcel } from '@/lib/utils'
 import { BarChart3, Shirt, DollarSign, Download } from 'lucide-react'
 
 interface TShirtSizeReport {
@@ -196,29 +196,63 @@ export default function ReportsPage() {
     }
   }
 
-  const downloadStatistics = async () => {
+  const downloadParticipantGroup = async (groupName: string, gender: string, minAge: number, maxAge: number, downloadKey: string) => {
     try {
-      setDownloading('statistics')
+      setDownloading(downloadKey)
+      const queryParams = new URLSearchParams({
+        gender: gender,
+        minAge: minAge.toString(),
+        maxAge: maxAge.toString()
+      })
+      
       const response = await apiCall(
-        '/api/admin/participants-statistics',
+        `/api/admin/participants-statistics?${queryParams.toString()}`,
         { requireAuth: true },
         handleUnauthorized
       )
-      const data = await response.json()
       
-      if (data.success && data.data) {
-        downloadStatisticsExcel(data.data, `participants-statistics-${new Date().toISOString().split('T')[0]}.xlsx`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      console.log(`${groupName} response:`, data)
+      
+      // Handle response format
+      let participantsData: any[] = []
+      
+      if (data.success && Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (Array.isArray(data)) {
+        participantsData = data
       } else {
         console.error('Invalid data format:', data)
-        alert('Failed to download: Invalid data format')
+        alert(`Failed to download: Invalid data format. Received: ${JSON.stringify(data).substring(0, 200)}`)
+        return
       }
+      
+      if (participantsData.length === 0) {
+        alert('No data available to download')
+        return
+      }
+      
+      const filename = `${groupName.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.xlsx`
+      downloadExcel(participantsData, filename, groupName)
     } catch (error) {
-      console.error('Error downloading statistics:', error)
-      alert('Failed to download statistics')
+      console.error(`Error downloading ${groupName}:`, error)
+      alert(`Failed to download ${groupName}: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setDownloading(null)
     }
   }
+
+  const downloadWomenGroup = () => downloadParticipantGroup('Women Group Report', 'Female', 0, 100, 'women')
+  const downloadMenGroupA = () => downloadParticipantGroup('Men Group A', 'Male', 0, 30, 'menA')
+  const downloadMenGroupB = () => downloadParticipantGroup('Men Group B', 'Male', 31, 45, 'menB')
+  const downloadMenGroupC = () => downloadParticipantGroup('Men Group C', 'Male', 46, 100, 'menC')
+  const downloadAllParticipants = () => downloadParticipantGroup('All Participants', 'All', 0, 100, 'allParticipants')
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] flex">
@@ -251,18 +285,18 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          {/* Excel Download Buttons */}
+          {/* Payment Export Buttons */}
           <div className="bg-white rounded-2xl p-6 md:p-8 border-2 border-[#F8C8DC] mb-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
                 <Download className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-[#640D5F]">Export Data</h2>
-                <p className="text-[#2B1341]/70">Download participant data as Excel files</p>
+                <h2 className="text-2xl font-bold text-[#640D5F]">Payment Reports</h2>
+                <p className="text-[#2B1341]/70">Download payment data as Excel files</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={downloadCompletedPayments}
                 disabled={downloading === 'completed'}
@@ -279,13 +313,60 @@ export default function ReportsPage() {
                 <Download className="w-5 h-5" />
                 {downloading === 'all' ? 'Downloading...' : 'Download All Payments'}
               </button>
+            </div>
+          </div>
+
+          {/* Participant Group Export Buttons */}
+          <div className="bg-white rounded-2xl p-6 md:p-8 border-2 border-[#F8C8DC] mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                <Download className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-[#640D5F]">Participant Group Reports</h2>
+                <p className="text-[#2B1341]/70">Download participant data by groups as Excel files</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <button
-                onClick={downloadStatistics}
-                disabled={downloading === 'statistics'}
+                onClick={downloadWomenGroup}
+                disabled={downloading === 'women'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-xl font-semibold hover:from-pink-600 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'women' ? 'Downloading...' : 'Women Group Report'}
+              </button>
+              <button
+                onClick={downloadMenGroupA}
+                disabled={downloading === 'menA'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'menA' ? 'Downloading...' : 'Men Group A (0-30)'}
+              </button>
+              <button
+                onClick={downloadMenGroupB}
+                disabled={downloading === 'menB'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl font-semibold hover:from-indigo-600 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'menB' ? 'Downloading...' : 'Men Group B (31-45)'}
+              </button>
+              <button
+                onClick={downloadMenGroupC}
+                disabled={downloading === 'menC'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-xl font-semibold hover:from-cyan-600 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'menC' ? 'Downloading...' : 'Men Group C (46-100)'}
+              </button>
+              <button
+                onClick={downloadAllParticipants}
+                disabled={downloading === 'allParticipants'}
                 className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Download className="w-5 h-5" />
-                {downloading === 'statistics' ? 'Downloading...' : 'Download Statistics'}
+                {downloading === 'allParticipants' ? 'Downloading...' : 'All Participants'}
               </button>
             </div>
           </div>
