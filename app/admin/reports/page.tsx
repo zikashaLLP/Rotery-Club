@@ -110,17 +110,40 @@ export default function ReportsPage() {
         { requireAuth: true },
         handleUnauthorized
       )
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log('Completed payments response:', data)
+      
+      // Handle different response formats
+      let participantsData: any[] = []
       
       if (Array.isArray(data)) {
-        downloadExcel(data, `completed-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'Completed Payments')
+        participantsData = data
+      } else if (data.success && Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (data.data && Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (Array.isArray(data.result)) {
+        participantsData = data.result
       } else {
         console.error('Invalid data format:', data)
-        alert('Failed to download: Invalid data format')
+        alert(`Failed to download: Invalid data format. Received: ${JSON.stringify(data).substring(0, 200)}`)
+        return
       }
+      
+      if (participantsData.length === 0) {
+        alert('No data available to download')
+        return
+      }
+      
+      downloadExcel(participantsData, `completed-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'Completed Payments')
     } catch (error) {
       console.error('Error downloading completed payments:', error)
-      alert('Failed to download completed payments')
+      alert(`Failed to download completed payments: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setDownloading(null)
     }
@@ -134,17 +157,40 @@ export default function ReportsPage() {
         { requireAuth: true },
         handleUnauthorized
       )
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log('All payments response:', data)
+      
+      // Handle different response formats
+      let participantsData: any[] = []
       
       if (Array.isArray(data)) {
-        downloadExcel(data, `all-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'All Payments')
+        participantsData = data
+      } else if (data.success && Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (data.data && Array.isArray(data.data)) {
+        participantsData = data.data
+      } else if (Array.isArray(data.result)) {
+        participantsData = data.result
       } else {
         console.error('Invalid data format:', data)
-        alert('Failed to download: Invalid data format')
+        alert(`Failed to download: Invalid data format. Received: ${JSON.stringify(data).substring(0, 200)}`)
+        return
       }
+      
+      if (participantsData.length === 0) {
+        alert('No data available to download')
+        return
+      }
+      
+      downloadExcel(participantsData, `all-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'All Payments')
     } catch (error) {
       console.error('Error downloading all payments:', error)
-      alert('Failed to download all payments')
+      alert(`Failed to download all payments: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setDownloading(null)
     }
