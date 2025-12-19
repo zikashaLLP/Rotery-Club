@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
 import { useAuth } from '@/context/AuthContext'
 import { apiCall } from '@/lib/api'
-import { BarChart3, Shirt, DollarSign } from 'lucide-react'
+import { downloadExcel, downloadStatisticsExcel } from '@/lib/utils'
+import { BarChart3, Shirt, DollarSign, Download } from 'lucide-react'
 
 interface TShirtSizeReport {
   'XS 34': number
@@ -36,6 +37,7 @@ export default function ReportsPage() {
   const [marathons, setMarathons] = useState<Marathon[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedMarathonId, setSelectedMarathonId] = useState('')
+  const [downloading, setDownloading] = useState<string | null>(null)
   const { handleUnauthorized } = useAuth()
 
   useEffect(() => {
@@ -100,6 +102,78 @@ export default function ReportsPage() {
     ? Math.max(...tshirtSizes.map((size) => tshirtReport[size as keyof TShirtSizeReport] as number))
     : 0
 
+  const downloadCompletedPayments = async () => {
+    try {
+      setDownloading('completed')
+      const response = await apiCall(
+        '/api/admin/participants-with-payment?paymentStatus=Completed',
+        { requireAuth: true },
+        handleUnauthorized
+      )
+      const data = await response.json()
+      
+      if (Array.isArray(data)) {
+        downloadExcel(data, `completed-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'Completed Payments')
+      } else {
+        console.error('Invalid data format:', data)
+        alert('Failed to download: Invalid data format')
+      }
+    } catch (error) {
+      console.error('Error downloading completed payments:', error)
+      alert('Failed to download completed payments')
+    } finally {
+      setDownloading(null)
+    }
+  }
+
+  const downloadAllPayments = async () => {
+    try {
+      setDownloading('all')
+      const response = await apiCall(
+        '/api/admin/participants-with-payment?paymentStatus=all',
+        { requireAuth: true },
+        handleUnauthorized
+      )
+      const data = await response.json()
+      
+      if (Array.isArray(data)) {
+        downloadExcel(data, `all-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'All Payments')
+      } else {
+        console.error('Invalid data format:', data)
+        alert('Failed to download: Invalid data format')
+      }
+    } catch (error) {
+      console.error('Error downloading all payments:', error)
+      alert('Failed to download all payments')
+    } finally {
+      setDownloading(null)
+    }
+  }
+
+  const downloadStatistics = async () => {
+    try {
+      setDownloading('statistics')
+      const response = await apiCall(
+        '/api/admin/participants-statistics',
+        { requireAuth: true },
+        handleUnauthorized
+      )
+      const data = await response.json()
+      
+      if (data.success && data.data) {
+        downloadStatisticsExcel(data.data, `participants-statistics-${new Date().toISOString().split('T')[0]}.xlsx`)
+      } else {
+        console.error('Invalid data format:', data)
+        alert('Failed to download: Invalid data format')
+      }
+    } catch (error) {
+      console.error('Error downloading statistics:', error)
+      alert('Failed to download statistics')
+    } finally {
+      setDownloading(null)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] flex">
       <AdminSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
@@ -128,6 +202,45 @@ export default function ReportsPage() {
                   ))}
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* Excel Download Buttons */}
+          <div className="bg-white rounded-2xl p-6 md:p-8 border-2 border-[#F8C8DC] mb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                <Download className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-[#640D5F]">Export Data</h2>
+                <p className="text-[#2B1341]/70">Download participant data as Excel files</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                onClick={downloadCompletedPayments}
+                disabled={downloading === 'completed'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'completed' ? 'Downloading...' : 'Download Completed Payments'}
+              </button>
+              <button
+                onClick={downloadAllPayments}
+                disabled={downloading === 'all'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'all' ? 'Downloading...' : 'Download All Payments'}
+              </button>
+              <button
+                onClick={downloadStatistics}
+                disabled={downloading === 'statistics'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'statistics' ? 'Downloading...' : 'Download Statistics'}
+              </button>
             </div>
           </div>
 

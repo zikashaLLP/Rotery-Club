@@ -31,12 +31,14 @@
     "slate-react": "^0.119.0",
     "slate-table": "^0.1.1",
     "tailwind-merge": "^3.4.0",
-    "tinymce": "^8.2.2"
+    "tinymce": "^8.2.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/xlsx": "^0.0.36",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
