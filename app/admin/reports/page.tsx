@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
 import { useAuth } from '@/context/AuthContext'
 import { apiCall } from '@/lib/api'
-import { downloadExcel } from '@/lib/utils'
+import { downloadExcel, downloadStatisticsExcel } from '@/lib/utils'
 import { BarChart3, Shirt, DollarSign, Download } from 'lucide-react'
 
 interface TShirtSizeReport {
@@ -254,6 +254,37 @@ export default function ReportsPage() {
   const downloadMenGroupC = () => downloadParticipantGroup('Men Group C', 'Male', 46, 100, 'menC')
   const downloadAllParticipants = () => downloadParticipantGroup('All Participants', 'All', 0, 100, 'allParticipants')
 
+  const downloadParticipantStatistics = async () => {
+    try {
+      setDownloading('statistics')
+      const response = await apiCall(
+        '/api/admin/reports/participant-statistics',
+        { requireAuth: true },
+        handleUnauthorized
+      )
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      console.log('Participant statistics response:', data)
+      
+      if (data.success && data.data) {
+        const filename = `participant-statistics-${new Date().toISOString().split('T')[0]}.xlsx`
+        downloadStatisticsExcel(data.data, filename)
+      } else {
+        console.error('Invalid data format:', data)
+        alert(`Failed to download: Invalid data format. Received: ${JSON.stringify(data).substring(0, 200)}`)
+      }
+    } catch (error) {
+      console.error('Error downloading participant statistics:', error)
+      alert(`Failed to download participant statistics: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setDownloading(null)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] flex">
       <AdminSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
@@ -367,6 +398,14 @@ export default function ReportsPage() {
               >
                 <Download className="w-5 h-5" />
                 {downloading === 'allParticipants' ? 'Downloading...' : 'All Participants'}
+              </button>
+              <button
+                onClick={downloadParticipantStatistics}
+                disabled={downloading === 'statistics'}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading === 'statistics' ? 'Downloading...' : 'Participant Statistics'}
               </button>
             </div>
           </div>
