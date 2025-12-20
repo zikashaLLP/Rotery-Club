@@ -61,6 +61,7 @@ export async function downloadExcel(data: any[], filename: string, sheetName: st
 
   // Set column widths (auto-size with minimum and maximum)
   worksheet.columns.forEach((column) => {
+    if (!column) return
     let maxLength = 10
     column.eachCell({ includeEmpty: false }, (cell) => {
       const cellValue = cell.value?.toString() || ''
