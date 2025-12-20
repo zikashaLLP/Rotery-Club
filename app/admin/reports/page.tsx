@@ -140,7 +140,7 @@ export default function ReportsPage() {
         return
       }
       
-      downloadExcel(participantsData, `completed-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'Completed Payments')
+      await downloadExcel(participantsData, `completed-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'Completed Payments')
     } catch (error) {
       console.error('Error downloading completed payments:', error)
       alert(`Failed to download completed payments: ${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -187,7 +187,7 @@ export default function ReportsPage() {
         return
       }
       
-      downloadExcel(participantsData, `all-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'All Payments')
+      await downloadExcel(participantsData, `all-payments-${new Date().toISOString().split('T')[0]}.xlsx`, 'All Payments')
     } catch (error) {
       console.error('Error downloading all payments:', error)
       alert(`Failed to download all payments: ${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -239,7 +239,7 @@ export default function ReportsPage() {
       }
       
       const filename = `${groupName.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.xlsx`
-      downloadExcel(participantsData, filename, groupName)
+      await downloadExcel(participantsData, filename, groupName)
     } catch (error) {
       console.error(`Error downloading ${groupName}:`, error)
       alert(`Failed to download ${groupName}: ${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -272,7 +272,7 @@ export default function ReportsPage() {
       
       if (data.success && data.data) {
         const filename = `participant-statistics-${new Date().toISOString().split('T')[0]}.xlsx`
-        downloadStatisticsExcel(data.data, filename)
+        await downloadStatisticsExcel(data.data, filename)
       } else {
         console.error('Invalid data format:', data)
         alert(`Failed to download: Invalid data format. Received: ${JSON.stringify(data).substring(0, 200)}`)
