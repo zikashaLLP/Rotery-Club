@@ -10,6 +10,7 @@ import {
   Users,
   Award,
   BarChart3,
+  Upload,
   LogOut,
   Menu,
   X,
@@ -30,6 +31,7 @@ export default function AdminSidebar({ isOpen, onToggle }: AdminSidebarProps) {
     { href: '/admin/participants', label: 'Participants', icon: Users },
     { href: '/admin/results', label: 'Results', icon: Award },
     { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
+    { href: '/admin/import-excel', label: 'Import Excel', icon: Upload },
   ]
 
   const isActive = (href: string) => pathname === href
