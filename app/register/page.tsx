@@ -1,12 +1,54 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Activity, Users, Heart } from 'lucide-react'
+import { Activity, Users, Heart, Clock } from 'lucide-react'
 import TicketCard from '@/components/TicketCard'
 import TicketSummaryCard from '@/components/TicketSummaryCard'
 import { useCart } from '@/context/CartContext'
+
+// Function to get the registration deadline based on current time
+const getRegistrationDeadline = () => {
+  const cutoffDate = new Date('2025-12-21T06:00:00+05:30') // 21/12/2025 6 AM
+  const now = new Date()
+  
+  // If current time is after 21/12/2025 6 AM, set deadline to 21/12/2025 end of day
+  if (now >= cutoffDate) {
+    return new Date('2025-12-21T23:59:59+05:30')
+  }
+  // Otherwise, use 20/12/2025 end of day
+  return new Date('2025-12-20T23:59:59+05:30')
+}
+
+// Function to get the display date string
+const getDisplayDate = () => {
+  const cutoffDate = new Date('2025-12-21T06:00:00+05:30')
+  const now = new Date()
+  
+  if (now >= cutoffDate) {
+    return '21/12/2025'
+  }
+  return '20/12/2025'
+}
+
+// Function to calculate registration time left
+const calculateRegistrationTimeLeft = () => {
+  const registrationDeadline = getRegistrationDeadline()
+  const now = new Date().getTime()
+  const distance = registrationDeadline.getTime() - now
+  
+  if (distance < 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  }
+
+  return {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((distance / (1000 * 60)) % 60),
+    seconds: Math.floor((distance / 1000) % 60),
+  }
+}
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -17,6 +59,24 @@ export default function RegisterPage() {
     addTicket,
     removeTicket,
   } = useCart()
+
+  const [registrationTimeLeft, setRegistrationTimeLeft] = useState(calculateRegistrationTimeLeft())
+  const [displayDate, setDisplayDate] = useState(getDisplayDate())
+
+  // Registration deadline countdown timer
+  useEffect(() => {
+    // Calculate immediately on mount
+    const updateTimer = () => {
+      setDisplayDate(getDisplayDate())
+      setRegistrationTimeLeft(calculateRegistrationTimeLeft())
+    }
+    
+    updateTimer() // Initial calculation
+
+    const timer = setInterval(updateTimer, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
 
   // Temporary flag to control registration availability
   const REGISTRATION_OPEN = true
@@ -142,6 +202,58 @@ export default function RegisterPage() {
           </motion.div>
         ) : (
           <>
+            {/* Registration Deadline Countdown */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="max-w-4xl mx-auto mb-6 md:mb-8"
+            >
+              <div className="bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-4 md:px-6 py-4 rounded-2xl shadow-xl border-4 border-yellow-300"
+                style={{
+                  boxShadow: '0 0 20px rgba(217, 22, 86, 0.5), 0 0 40px rgba(255, 178, 0, 0.3)',
+                }}
+              >
+                <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4">
+                  <motion.div
+                    animate={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    <Clock className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" />
+                  </motion.div>
+                  
+                  <div className="text-white text-center md:text-left">
+                    <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-1">⚡ Last Chance to Register!</div>
+                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs md:text-sm font-semibold">Last Date: </span>
+                        <span className="text-lg md:text-xl font-black text-yellow-300 tracking-wide">{displayDate}</span>
+                      </div>
+                      <span className="hidden md:inline text-yellow-300">•</span>
+                      <div className="flex items-center gap-1 md:gap-2">
+                        <span className="text-xs font-semibold text-yellow-300">Time Left:</span>
+                        <div className="flex items-center gap-1 md:gap-2">
+                          {registrationTimeLeft.days > 0 && (
+                            <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
+                              {String(registrationTimeLeft.days).padStart(2, '0')}d
+                            </span>
+                          )}
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
+                            {String(registrationTimeLeft.hours).padStart(2, '0')}h
+                          </span>
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
+                            {String(registrationTimeLeft.minutes).padStart(2, '0')}m
+                          </span>
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm animate-pulse">
+                            {String(registrationTimeLeft.seconds).padStart(2, '0')}s
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
             <div className="md:flex md:gap-6 lg:gap-8">
               {/* Left Section - Registration Receipts */}
               <motion.div 

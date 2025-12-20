@@ -9,10 +9,55 @@ import PosterAwarenessSection from '@/components/PosterAwarenessSection'
 
 const marathonDate = new Date('2025-12-28T05:00:00+05:30')
 
+// Function to get the registration deadline based on current time
+const getRegistrationDeadline = () => {
+  const cutoffDate = new Date('2025-12-21T06:00:00+05:30') // 21/12/2025 6 AM
+  const now = new Date()
+  
+  // If current time is after 21/12/2025 6 AM, set deadline to 21/12/2025 end of day
+  if (now >= cutoffDate) {
+    return new Date('2025-12-21T23:59:59+05:30')
+  }
+  // Otherwise, use 20/12/2025 end of day
+  return new Date('2025-12-20T23:59:59+05:30')
+}
+
+// Function to get the display date string
+const getDisplayDate = () => {
+  const cutoffDate = new Date('2025-12-21T06:00:00+05:30')
+  const now = new Date()
+  
+  if (now >= cutoffDate) {
+    return '21/12/2025'
+  }
+  return '20/12/2025'
+}
+
+// Function to calculate registration time left
+const calculateRegistrationTimeLeft = () => {
+  const registrationDeadline = getRegistrationDeadline()
+  const now = new Date().getTime()
+  const distance = registrationDeadline.getTime() - now
+  
+  if (distance < 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  }
+
+  return {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((distance / (1000 * 60)) % 60),
+    seconds: Math.floor((distance / 1000) % 60),
+  }
+}
+
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [registrationTimeLeft, setRegistrationTimeLeft] = useState(calculateRegistrationTimeLeft())
+  const [displayDate, setDisplayDate] = useState(getDisplayDate())
   const [isMapModalOpen, setIsMapModalOpen] = useState(false)
 
+  // Marathon countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime()
@@ -30,6 +75,21 @@ export default function Home() {
         seconds: Math.floor((distance / 1000) % 60),
       })
     }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  // Registration deadline countdown timer
+  useEffect(() => {
+    // Calculate immediately on mount
+    const updateTimer = () => {
+      setDisplayDate(getDisplayDate())
+      setRegistrationTimeLeft(calculateRegistrationTimeLeft())
+    }
+    
+    updateTimer() // Initial calculation
+
+    const timer = setInterval(updateTimer, 1000)
 
     return () => clearInterval(timer)
   }, [])
@@ -142,7 +202,7 @@ export default function Home() {
                 ))}
               </motion.div>
 
-              {/* Last Registration Date Notice - Urgent */}
+              {/* Last Registration Date Notice - Urgent with Countdown */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ 
@@ -164,23 +224,47 @@ export default function Home() {
                     ease: "easeInOut"
                   }
                 }}
-                className="relative inline-flex items-center gap-3 bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-8 py-4 rounded-2xl shadow-2xl border-4 border-yellow-300 animate-pulse-fast"
+                className="relative bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-6 py-5 rounded-2xl shadow-2xl border-4 border-yellow-300"
                 style={{
                   boxShadow: '0 0 30px rgba(217, 22, 86, 0.6), 0 0 60px rgba(255, 178, 0, 0.4)',
                 }}
               >
-                <motion.div
-                  animate={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
-                >
-                  <Clock className="w-6 h-6 text-yellow-300" />
-                </motion.div>
-                
-                <div className="text-white">
-                  <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider">⚡ Hurry Up!</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold">Last Date: </span>
-                    <span className="text-2xl font-black text-yellow-300 tracking-wide">20/12/2025</span>
+                <div className="flex flex-col md:flex-row items-center gap-4">
+                  <motion.div
+                    animate={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    <Clock className="w-6 h-6 text-yellow-300" />
+                  </motion.div>
+                  
+                  <div className="text-white text-center md:text-left">
+                    <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-1">⚡ Last Chance to Register!</div>
+                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold">Last Date: </span>
+                        <span className="text-xl md:text-2xl font-black text-yellow-300 tracking-wide">{displayDate}</span>
+                      </div>
+                      <span className="hidden md:inline text-yellow-300">•</span>
+                      <div className="flex items-center gap-1 md:gap-2">
+                        <span className="text-xs md:text-sm font-semibold text-yellow-300">Time Left:</span>
+                        <div className="flex items-center gap-1 md:gap-2">
+                          {registrationTimeLeft.days > 0 && (
+                            <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
+                              {String(registrationTimeLeft.days).padStart(2, '0')}d
+                            </span>
+                          )}
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
+                            {String(registrationTimeLeft.hours).padStart(2, '0')}h
+                          </span>
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
+                            {String(registrationTimeLeft.minutes).padStart(2, '0')}m
+                          </span>
+                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base animate-pulse">
+                            {String(registrationTimeLeft.seconds).padStart(2, '0')}s
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
