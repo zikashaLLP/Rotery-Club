@@ -60,20 +60,17 @@ export async function downloadExcel(data: any[], filename: string, sheetName: st
   })
 
   // Set column widths (auto-size with minimum and maximum)
-  worksheet.columns.forEach((column, index) => {
-    if (!column) return
+  const columns = worksheet.columns || []
+  for (let i = 0; i < columns.length; i++) {
+    const column = columns[i]
+    if (!column || !column.eachCell) continue
     let maxLength = 10
-    try {
-      column.eachCell({ includeEmpty: false }, (cell) => {
-        const cellValue = cell.value?.toString() || ''
-        maxLength = Math.max(maxLength, cellValue.length)
-      })
-      column.width = Math.min(Math.max(maxLength + 2, 12), 50)
-    } catch (error) {
-      // If column doesn't have cells, set default width
-      column.width = 15
-    }
-  })
+    column.eachCell({ includeEmpty: false }, (cell) => {
+      const cellValue = cell.value?.toString() || ''
+      maxLength = Math.max(maxLength, cellValue.length)
+    })
+    column.width = Math.min(Math.max(maxLength + 2, 12), 50)
+  }
 
   // Freeze header row
   worksheet.views = [
