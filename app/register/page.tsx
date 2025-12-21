@@ -1,32 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Activity, Users, Heart, XCircle } from 'lucide-react'
 import TicketCard from '@/components/TicketCard'
 import TicketSummaryCard from '@/components/TicketSummaryCard'
 import { useCart } from '@/context/CartContext'
-
-// Function to get the registration deadline based on current time
-const getRegistrationDeadline = () => {
-  const cutoffDate = new Date('2025-12-21T06:00:00+05:30') // 21/12/2025 6 AM
-  const now = new Date()
-  
-  // If current time is after 21/12/2025 6 AM, set deadline to 21/12/2025 end of day
-  if (now >= cutoffDate) {
-    return new Date('2025-12-21T23:59:59+05:30')
-  }
-  // Otherwise, use 20/12/2025 end of day
-  return new Date('2025-12-20T23:59:59+05:30')
-}
-
-// Function to check if registration is closed
-const isRegistrationClosed = () => {
-  const registrationDeadline = getRegistrationDeadline()
-  const now = new Date().getTime()
-  return now > registrationDeadline.getTime()
-}
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -38,19 +18,8 @@ export default function RegisterPage() {
     removeTicket,
   } = useCart()
 
-  const [isClosed, setIsClosed] = useState(isRegistrationClosed())
-
-  // Check registration status periodically
-  useEffect(() => {
-    const checkStatus = () => {
-      setIsClosed(isRegistrationClosed())
-    }
-    
-    checkStatus() // Initial check
-    const timer = setInterval(checkStatus, 1000) // Check every second
-
-    return () => clearInterval(timer)
-  }, [])
+  // Registration is closed
+  const isClosed = true
 
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
@@ -59,6 +28,35 @@ export default function RegisterPage() {
     }
     // Navigate to checkout page
     router.push('/checkout')
+  }
+
+  // Show registration closed message - return early
+  if (isClosed) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] flex items-center justify-center pt-20 md:pt-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mx-auto text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-red-200 px-6 py-10 md:px-10 md:py-14"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+              <XCircle className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-2">
+              Registration is Closed
+            </h2>
+            <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
+              Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> has been closed.
+            </p>
+            <p className="text-[#2B1341]/70 text-sm md:text-base">
+              The registration deadline has passed. Thank you for your interest in the event.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
@@ -154,31 +152,7 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        {isClosed ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-2xl mx-auto mt-8 md:mt-12 text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-red-200 px-6 py-10 md:px-10 md:py-14"
-          >
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
-                <XCircle className="w-8 h-8 text-white" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-2">
-                Registration are Closed
-              </h2>
-              <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
-                Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> has been closed.
-              </p>
-              <p className="text-[#2B1341]/70 text-sm md:text-base">
-                The registration deadline has passed. Thank you for your interest in the event.
-              </p>
-            </div>
-          </motion.div>
-        ) : (
-          <>
-            <div className="md:flex md:gap-6 lg:gap-8">
+        <div className="md:flex md:gap-6 lg:gap-8">
               {/* Left Section - Registration Receipts */}
               <motion.div 
                 initial={{ opacity: 0, x: -30 }}
@@ -262,8 +236,6 @@ export default function RegisterPage() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </>
-        )}
       </div>
     </div>
   )

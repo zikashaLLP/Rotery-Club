@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Clock, MapPin, PhoneCall, Mail, Map, X, Download, Heart, Users, Activity, Trophy, Award, Medal, Target } from 'lucide-react'
+import { Calendar, XCircle, MapPin, PhoneCall, Mail, Map, X, Download, Heart, Users, Activity, Trophy, Award, Medal, Target } from 'lucide-react'
 import PosterAwarenessSection from '@/components/PosterAwarenessSection'
 
 const marathonDate = new Date('2025-12-28T05:00:00+05:30')
@@ -22,39 +22,16 @@ const getRegistrationDeadline = () => {
   return new Date('2025-12-20T23:59:59+05:30')
 }
 
-// Function to get the display date string
-const getDisplayDate = () => {
-  const cutoffDate = new Date('2025-12-21T06:00:00+05:30')
-  const now = new Date()
-  
-  if (now >= cutoffDate) {
-    return '21/12/2025'
-  }
-  return '20/12/2025'
-}
-
-// Function to calculate registration time left
-const calculateRegistrationTimeLeft = () => {
+// Function to check if registration is closed
+const isRegistrationClosed = () => {
   const registrationDeadline = getRegistrationDeadline()
   const now = new Date().getTime()
-  const distance = registrationDeadline.getTime() - now
-  
-  if (distance < 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  }
-
-  return {
-    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((distance / (1000 * 60)) % 60),
-    seconds: Math.floor((distance / 1000) % 60),
-  }
+  return now > registrationDeadline.getTime()
 }
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-  const [registrationTimeLeft, setRegistrationTimeLeft] = useState(calculateRegistrationTimeLeft())
-  const [displayDate, setDisplayDate] = useState(getDisplayDate())
+  const [isRegistrationClosedState, setIsRegistrationClosedState] = useState(isRegistrationClosed())
   const [isMapModalOpen, setIsMapModalOpen] = useState(false)
 
   // Marathon countdown timer
@@ -79,17 +56,14 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  // Registration deadline countdown timer
+  // Check registration status periodically
   useEffect(() => {
-    // Calculate immediately on mount
-    const updateTimer = () => {
-      setDisplayDate(getDisplayDate())
-      setRegistrationTimeLeft(calculateRegistrationTimeLeft())
+    const checkStatus = () => {
+      setIsRegistrationClosedState(isRegistrationClosed())
     }
     
-    updateTimer() // Initial calculation
-
-    const timer = setInterval(updateTimer, 1000)
+    checkStatus() // Initial check
+    const timer = setInterval(checkStatus, 1000) // Check every second
 
     return () => clearInterval(timer)
   }, [])
@@ -202,72 +176,30 @@ export default function Home() {
                 ))}
               </motion.div>
 
-              {/* Last Registration Date Notice - Urgent with Countdown */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: [1, 1.05, 1],
-                  y: [0, -5, 0]
-                }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: 0.5,
-                  scale: {
-                    repeat: Infinity,
-                    duration: 1.5,
-                    ease: "easeInOut"
-                  },
-                  y: {
-                    repeat: Infinity,
-                    duration: 1.5,
-                    ease: "easeInOut"
-                  }
-                }}
-                className="relative bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-6 py-5 rounded-2xl shadow-2xl border-4 border-yellow-300"
-                style={{
-                  boxShadow: '0 0 30px rgba(217, 22, 86, 0.6), 0 0 60px rgba(255, 178, 0, 0.4)',
-                }}
-              >
-                <div className="flex flex-col md:flex-row items-center gap-4">
-                  <motion.div
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
-                  >
-                    <Clock className="w-6 h-6 text-yellow-300" />
-                  </motion.div>
-                  
-                  <div className="text-white text-center md:text-left">
-                    <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-1">⚡ Last Chance to Register!</div>
-                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold">Last Date: </span>
-                        <span className="text-xl md:text-2xl font-black text-yellow-300 tracking-wide">{displayDate}</span>
-                      </div>
-                      <span className="hidden md:inline text-yellow-300">•</span>
-                      <div className="flex items-center gap-1 md:gap-2">
-                        <span className="text-xs md:text-sm font-semibold text-yellow-300">Time Left:</span>
-                        <div className="flex items-center gap-1 md:gap-2">
-                          {registrationTimeLeft.days > 0 && (
-                            <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
-                              {String(registrationTimeLeft.days).padStart(2, '0')}d
-                            </span>
-                          )}
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
-                            {String(registrationTimeLeft.hours).padStart(2, '0')}h
-                          </span>
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base">
-                            {String(registrationTimeLeft.minutes).padStart(2, '0')}m
-                          </span>
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-sm md:text-base animate-pulse">
-                            {String(registrationTimeLeft.seconds).padStart(2, '0')}s
-                          </span>
-                        </div>
+              {/* Registration Status Notice */}
+              {isRegistrationClosedState ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="relative bg-gradient-to-r from-gray-600 via-gray-700 to-gray-600 px-6 py-5 rounded-2xl shadow-2xl border-4 border-gray-400"
+                >
+                  <div className="flex flex-col md:flex-row items-center gap-4">
+                    <motion.div
+                      animate={{ rotate: [0, -10, 10, 0] }}
+                      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                    >
+                      <XCircle className="w-6 h-6 text-white" />
+                    </motion.div>
+                    <div className="text-white text-center md:text-left">
+                      <div className="text-sm font-bold text-white uppercase tracking-wider mb-1">Registration Closed</div>
+                      <div className="text-base md:text-lg">
+                        Online registration for Visnagar Marathon 2025 has been closed.
                       </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              ) : null}
 
               {/* CTA Buttons */}
               <motion.div
@@ -276,13 +208,19 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="flex flex-wrap gap-4 pt-2"
               >
-                <Link
-                  href="/register"
-                  className="bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white rounded-full hover:from-[#EB5B00] hover:to-[#D91656] hover:scale-105 active:scale-95 transition-all duration-300 font-bold whitespace-nowrap px-10 py-4 text-lg shadow-lg hover:shadow-xl tracking-wide relative overflow-hidden group animate-pulse-glow animate-button-shine hover:-translate-y-1"
-                >
-                  <span className="relative z-10">Register Now</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </Link>
+                {isRegistrationClosedState ? (
+                  <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-full px-10 py-4 text-lg font-bold whitespace-nowrap opacity-60 cursor-not-allowed">
+                    Registration Closed
+                  </div>
+                ) : (
+                  <Link
+                    href="/register"
+                    className="bg-gradient-to-r from-[#D91656] to-[#EB5B00] text-white rounded-full hover:from-[#EB5B00] hover:to-[#D91656] hover:scale-105 active:scale-95 transition-all duration-300 font-bold whitespace-nowrap px-10 py-4 text-lg shadow-lg hover:shadow-xl tracking-wide relative overflow-hidden group animate-pulse-glow animate-button-shine hover:-translate-y-1"
+                  >
+                    <span className="relative z-10">Register Now</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </Link>
+                )}
                 <Link
                   href="/race-details"
                   className="px-8 py-4 border-2 border-[#640D5F] text-[#640D5F] font-semibold rounded-full hover:bg-[#640D5F] hover:text-white transition"

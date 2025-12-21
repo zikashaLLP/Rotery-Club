@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react'
+import { ChevronDown, ChevronUp, ArrowLeft, XCircle } from 'lucide-react'
 import ParticipantForm from '@/components/ParticipantForm'
 import Button from '@/components/ui/Button'
 import { useCart } from '@/context/CartContext'
 import { useCheckout } from '@/hooks/useCheckout'
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -32,6 +33,9 @@ export default function CheckoutPage() {
   const [filledParticipants, setFilledParticipants] = useState<Set<number>>(new Set())
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null)
   const [showPaymentButton, setShowPaymentButton] = useState(false)
+
+  // Registration is closed
+  const isClosed = true
 
   // Redirect if no tickets selected
   useEffect(() => {
@@ -161,6 +165,41 @@ export default function CheckoutPage() {
 
   if (selectedTickets.length === 0) {
     return null
+  }
+
+  // Show registration closed message
+  if (isClosed) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#FFF7EB] via-[#FFF1F5] to-[#FFF7EB] flex items-center justify-center pt-20 md:pt-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mx-auto text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-red-200 px-6 py-10 md:px-10 md:py-14"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+              <XCircle className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-2">
+              Registration is Closed
+            </h2>
+            <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
+              Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> has been closed.
+            </p>
+            <p className="text-[#2B1341]/70 text-sm md:text-base mb-6">
+              The registration deadline has passed. Thank you for your interest in the event.
+            </p>
+            <button
+              onClick={() => router.push('/register')}
+              className="px-6 py-3 bg-[#640D5F] text-white font-semibold rounded-lg hover:bg-[#D91656] transition-colors"
+            >
+              Back to Registration Page
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
