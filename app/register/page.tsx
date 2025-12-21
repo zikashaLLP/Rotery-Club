@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Activity, Users, Heart, Clock } from 'lucide-react'
+import { Activity, Users, Heart, XCircle } from 'lucide-react'
 import TicketCard from '@/components/TicketCard'
 import TicketSummaryCard from '@/components/TicketSummaryCard'
 import { useCart } from '@/context/CartContext'
@@ -21,33 +21,11 @@ const getRegistrationDeadline = () => {
   return new Date('2025-12-20T23:59:59+05:30')
 }
 
-// Function to get the display date string
-const getDisplayDate = () => {
-  const cutoffDate = new Date('2025-12-21T06:00:00+05:30')
-  const now = new Date()
-  
-  if (now >= cutoffDate) {
-    return '21/12/2025'
-  }
-  return '20/12/2025'
-}
-
-// Function to calculate registration time left
-const calculateRegistrationTimeLeft = () => {
+// Function to check if registration is closed
+const isRegistrationClosed = () => {
   const registrationDeadline = getRegistrationDeadline()
   const now = new Date().getTime()
-  const distance = registrationDeadline.getTime() - now
-  
-  if (distance < 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  }
-
-  return {
-    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((distance / (1000 * 60)) % 60),
-    seconds: Math.floor((distance / 1000) % 60),
-  }
+  return now > registrationDeadline.getTime()
 }
 
 export default function RegisterPage() {
@@ -60,26 +38,19 @@ export default function RegisterPage() {
     removeTicket,
   } = useCart()
 
-  const [registrationTimeLeft, setRegistrationTimeLeft] = useState(calculateRegistrationTimeLeft())
-  const [displayDate, setDisplayDate] = useState(getDisplayDate())
+  const [isClosed, setIsClosed] = useState(isRegistrationClosed())
 
-  // Registration deadline countdown timer
+  // Check registration status periodically
   useEffect(() => {
-    // Calculate immediately on mount
-    const updateTimer = () => {
-      setDisplayDate(getDisplayDate())
-      setRegistrationTimeLeft(calculateRegistrationTimeLeft())
+    const checkStatus = () => {
+      setIsClosed(isRegistrationClosed())
     }
     
-    updateTimer() // Initial calculation
-
-    const timer = setInterval(updateTimer, 1000)
+    checkStatus() // Initial check
+    const timer = setInterval(checkStatus, 1000) // Check every second
 
     return () => clearInterval(timer)
   }, [])
-
-  // Temporary flag to control registration availability
-  const REGISTRATION_OPEN = true
 
   const handleCheckout = () => {
     if (selectedTickets.length === 0) {
@@ -183,77 +154,30 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        {!REGISTRATION_OPEN ? (
+        {isClosed ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-2xl mx-auto mt-8 md:mt-12 text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-[#F8C8DC] px-6 py-10 md:px-10 md:py-14"
+            className="max-w-2xl mx-auto mt-8 md:mt-12 text-center bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-red-200 px-6 py-10 md:px-10 md:py-14"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-4">
-              Registrations Opening Soon
-            </h2>
-            <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
-              Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> will start soon.
-            </p>
-            <p className="text-[#2B1341]/70 text-sm md:text-base">
-              Please check back here shortly for updates, or follow Rotary Club of Visnagar on social media for the latest announcements.
-            </p>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                <XCircle className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#640D5F] mb-2">
+                Registration are Closed
+              </h2>
+              <p className="text-[#2B1341]/80 text-base md:text-lg mb-4">
+                Online registration for <span className="font-semibold">Visnagar Marathon 2025</span> has been closed.
+              </p>
+              <p className="text-[#2B1341]/70 text-sm md:text-base">
+                The registration deadline has passed. Thank you for your interest in the event.
+              </p>
+            </div>
           </motion.div>
         ) : (
           <>
-            {/* Registration Deadline Countdown */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="max-w-4xl mx-auto mb-6 md:mb-8"
-            >
-              <div className="bg-gradient-to-r from-red-600 via-[#D91656] to-red-600 px-4 md:px-6 py-4 rounded-2xl shadow-xl border-4 border-yellow-300"
-                style={{
-                  boxShadow: '0 0 20px rgba(217, 22, 86, 0.5), 0 0 40px rgba(255, 178, 0, 0.3)',
-                }}
-              >
-                <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4">
-                  <motion.div
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
-                  >
-                    <Clock className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" />
-                  </motion.div>
-                  
-                  <div className="text-white text-center md:text-left">
-                    <div className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-1">⚡ Last Chance to Register!</div>
-                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs md:text-sm font-semibold">Last Date: </span>
-                        <span className="text-lg md:text-xl font-black text-yellow-300 tracking-wide">{displayDate}</span>
-                      </div>
-                      <span className="hidden md:inline text-yellow-300">•</span>
-                      <div className="flex items-center gap-1 md:gap-2">
-                        <span className="text-xs font-semibold text-yellow-300">Time Left:</span>
-                        <div className="flex items-center gap-1 md:gap-2">
-                          {registrationTimeLeft.days > 0 && (
-                            <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
-                              {String(registrationTimeLeft.days).padStart(2, '0')}d
-                            </span>
-                          )}
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
-                            {String(registrationTimeLeft.hours).padStart(2, '0')}h
-                          </span>
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm">
-                            {String(registrationTimeLeft.minutes).padStart(2, '0')}m
-                          </span>
-                          <span className="bg-yellow-300/20 px-2 py-1 rounded text-yellow-300 font-bold text-xs md:text-sm animate-pulse">
-                            {String(registrationTimeLeft.seconds).padStart(2, '0')}s
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
             <div className="md:flex md:gap-6 lg:gap-8">
               {/* Left Section - Registration Receipts */}
               <motion.div 

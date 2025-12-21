@@ -10,7 +10,7 @@ import { Upload, Download, FileSpreadsheet, Loader2, CheckCircle2, XCircle } fro
 interface ImportResponse {
   success: boolean
   message: string
-  data: Array<{
+  data?: Array<{
     Sr_No: number
     BIB_NO: string
     Name: string
@@ -23,15 +23,18 @@ interface ImportResponse {
     Birth_Date: string
     Amount: number
   }>
-  count: number
-  notificationsSent: number
-  notificationErrors: Array<{
+  count?: number
+  notificationsSent?: number
+  notificationErrors?: Array<{
     participantId: number
     email: string
     mobileNo: string
     error: string
     details: string
   }>
+  // Error fields
+  errors?: Array<string | { message: string; [key: string]: any }>
+  error?: string | { message: string; [key: string]: any }
 }
 
 export default function ImportExcelPage() {
@@ -106,12 +109,36 @@ export default function ImportExcelPage() {
         return
       }
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
+      // Parse response data
+      const data = await response.json().catch(() => ({})) as ImportResponse
+
+      // Check if response contains errors (even if HTTP status is 200)
+      if (!response.ok || data.success === false) {
+        // Handle different error formats
+        let errorMessage = ''
+        
+        if (data.errors && Array.isArray(data.errors)) {
+          // If errors is an array
+          errorMessage = data.errors.map((err: any) => 
+            typeof err === 'string' ? err : err.message || JSON.stringify(err)
+          ).join('\n')
+        } else if (data.error) {
+          // If error is a single object or string
+          errorMessage = typeof data.error === 'string' 
+            ? data.error 
+            : data.error.message || JSON.stringify(data.error)
+        } else if (data.message) {
+          // If message contains error info
+          errorMessage = data.message
+        } else {
+          errorMessage = `HTTP error! status: ${response.status}`
+        }
+        
+        setError(errorMessage)
+        return
       }
 
-      const data: ImportResponse = await response.json()
+      // Success case
       setImportResponse(data)
     } catch (error) {
       console.error('Error uploading file:', error)
@@ -207,9 +234,14 @@ export default function ImportExcelPage() {
 
               {/* Error Message */}
               {error && (
-                <div className="flex items-center gap-2 p-4 bg-red-50 border-2 border-red-200 rounded-xl text-red-700">
-                  <XCircle className="w-5 h-5" />
-                  <span>{error}</span>
+                <div className="p-4 bg-red-50 border-2 border-red-200 rounded-xl">
+                  <div className="flex items-start gap-2">
+                    <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-red-800 mb-2">Upload Failed</h3>
+                      <div className="text-red-700 whitespace-pre-line text-sm">{error}</div>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -245,7 +277,7 @@ export default function ImportExcelPage() {
             </div>
           )}
 
-          {importResponse && (
+          {importResponse && importResponse.success !== false && (
             <div className="space-y-6">
               {/* Success Message */}
               <div className="bg-white rounded-2xl p-6 md:p-8 border-2 border-[#F8C8DC]">
@@ -371,4 +403,5 @@ export default function ImportExcelPage() {
     </div>
   )
 }
+
 
